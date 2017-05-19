@@ -1,0 +1,18 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/hj/Nut/`13 的文档/GitHub/Code collection/dataStructures/DataStructureExperiment/Demo5/main.cpp
+iostream
+-
+math.h
+-
+malloc.h
+-
+stack
+-
+

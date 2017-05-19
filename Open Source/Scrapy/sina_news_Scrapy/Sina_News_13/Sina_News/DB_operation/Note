@@ -1,0 +1,45 @@
+#  数据库表结构
+
+CREATE TABLE `sina_news`.`sina_news` (
+  `id` INT NOT NULL,
+  `title` VARCHAR(45) NULL,
+  `long_title` VARCHAR(45) NULL,
+  `source` VARCHAR(45) NULL,
+  `url` VARCHAR(128) NULL,
+  `pub_date` DATETIME NULL,
+  `article_date` DATE NULL,
+  `qreply` INT NULL,
+  `total` INT NULL,
+  `shows` INT NULL,
+  `praise` INT NULL,
+  `dispraise` INT NULL,
+  `news` TEXT NULL,
+  `details` TEXT NULL,
+  `flag` INT NULL DEFAULT 1000,
+  PRIMARY KEY (`id`))
+  ENGINE= MYISAM CHARACTER SET utf8 ;
+
+
+#  返回新闻信息字典
+news_dict={
+    "id"            :'',        #ID
+    "title"         :'',        #标题
+    "long_title"    :'',        #完整标题
+    "source"        :'',        #来源
+    "url"           :'',        #新闻链接
+    "pub_date"      :'',        #新闻发布时间
+    "article_date"  :'',        #文章发布时间
+    "qreply"        :'',        #快速回复数目
+    "total"         :'',        #总体回复数目
+    "show"          :'',        #
+    "praise"        :'',        #喜欢数
+    "dispraise"     :'',        #不喜欢数目
+    "news"          :'',        #新闻内容
+    "details"       :'',        #完整新闻内容 图片以链接的形式保存在文本中
+    "flag"          :1000       #标记位
+    }
+    
+#   FLAG 设计逻辑
+1000 - 正常(默认）
+2000 - 获取不到新闻内容主体
+other - 待设计
