@@ -4,3 +4,7 @@
 *.xml
 out
 *.iml
+*.conf
+*.txt
+*.exe
+*.class
