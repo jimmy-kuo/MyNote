@@ -1,5 +1,5 @@
 `13 的学习笔记
-----------------------
+====================
 *学习笔记与练习项目源码整理*
 
 **The Only Easy Day Was Yesterday**
@@ -149,8 +149,8 @@
 * 基于QT的源代码编辑器 - [Racoon](https://github.com/h-j-13/Racoon)
 
 ## About
-[`13的博客](http://www.jianshu.com/u/75156f101757)
-z.g.13@163.com/h.j.13.new@gmail.com
-Harbin Institute of Technology at Weihai
+[`13的博客](http://www.jianshu.com/u/75156f101757)		
+z.g.13@163.com/h.j.13.new@gmail.com		
+Harbin Institute of Technology at Weihai		
 
 #### 2017.05.19
