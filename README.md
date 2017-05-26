@@ -148,6 +148,14 @@
 #### 个人项目
 * 基于QT的源代码编辑器 - [Racoon](https://github.com/h-j-13/Racoon)
 
+# Document
+*学习过程部分自翻文档*
+
+### RFC
+* RFC 1714  
+* RFC 3912
+* RFC 1035 + 1034 (DNS zonefile 文件格式)
+
 ## About
 * [`13的博客](http://www.jianshu.com/u/75156f101757)		
 * z.g.13@163.com/h.j.13.new@gmail.com		
