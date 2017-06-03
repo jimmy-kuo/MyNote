@@ -1,15 +1,15 @@
-##Leetcode-for-13     
+## Leetcode-for-13     
 
 --------
 
-##Deatils：
+## Deatils：
 
 
 
 * Leetcode代码
 * 使用 C/C++/JAVA/Python
 
-##about me：
+## about me：
 
 * Email:z.g.13@163.com   
 * QQ: 450943084   
