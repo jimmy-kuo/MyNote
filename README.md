@@ -106,6 +106,8 @@
 《**MySQL内核** InnoDB存储引擎》
 《MySQL 必知必会》
 
+* 基于MySQLdb的数据库python脚本(高效,易用,易扩展)
+
 #### 数据库设计项目
 
 *  WHOIS存储系统
