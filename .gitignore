@@ -5,6 +5,9 @@
 out
 *.iml
 *.conf
-
+*.ppt
+*.word
+*.xls
+*.pptx
 *.exe
 *.class
