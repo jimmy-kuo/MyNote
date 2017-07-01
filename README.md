@@ -115,6 +115,8 @@
 《MySQL 必知必会》
 
 * 基于MySQLdb的数据库python脚本(高效,易用,易扩展)
+* 基于InnoDB的MySQL优化my.ini
+* [MySQL 5.7.18 安装及使用及调优过程记录](http://www.jianshu.com/p/08c064d93d34)
 
 #### 数据库设计项目
 
