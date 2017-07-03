@@ -1,7 +1,8 @@
 `13 的学习笔记
 ====================
-*学习笔记与练习项目源码整理*
-
+![](https://img.shields.io/badge/Prower%20By-%6013-brightgreen.svg)![](https://img.shields.io/github/stars/h-j-13/MyNote.svg)![](https://img.shields.io/github/forks/h-j-13/MyNote.svg)![](https://img.shields.io/badge/Python-2.7.12%2B-red.svg)![](https://img.shields.io/badge/C%2FC%2B%2B-c99-orange.svg)![](https://img.shields.io/badge/MySQL-5.7.x-yellow.svg)  
+	
+*学习笔记与练习项目源码整理*    
 **The Only Easy Day Was Yesterday**
 
 
