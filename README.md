@@ -72,10 +72,11 @@
 ## Verilog DHL
 
 #### 学习笔记
-* 硬件描述语言 DHL 学习笔记
+* [硬件描述语言 DHL 学习笔记](http://www.jianshu.com/p/1802f7efe030)
 
 #### 项目
 * 同步FIFO的实现
+* MPIS风格CPU的实现
 
 # 算法
 参考书籍
