@@ -45,17 +45,18 @@ module top #(parameter WIDTH =32 )
     // ... RESERT
     //end
 
-    // 同频时钟 clk1 上升沿与clk相反
+    // 开发板标准时钟为 450 Mhz
+    // 分频时钟 调整为 450 hz
     always @ (posedge clk)
     begin 
-        if(count1==1)
+        if(count1 == 1000000)
             begin 
-                clk1<=~clk1;
-                count1<=0;
+                clk1 <= ~clk1;
+                count1 <= 0;
             end
         else
             begin 
-                count1<=count1+1;
+                count1 <=count1+1;
             end
     end
 
