@@ -1,4 +1,4 @@
-/* --------------------------------------
+﻿/* --------------------------------------
 哈尔滨工业大学(威海) - 计算机组成原理课程设计
 MIPS.v
 
@@ -36,7 +36,7 @@ module top #(parameter WIDTH =32 )
     wire [3:0] scan;
     wire [7:0] seg7;
   
-    reg count1=0;
+    reg [23:0]count1 = 0;
     reg clk1=0;
 
     // 通过button 复位
@@ -49,17 +49,19 @@ module top #(parameter WIDTH =32 )
     // 分频时钟 调整为 450 hz
     always @ (posedge clk)
     begin 
-        if(count1 == 1000000)
+        if(count1 == 125000)
             begin 
-                clk1 <= ~clk1;
+                clk1 =~ clk1;
                 count1 <= 0;
             end
         else
             begin 
-                count1 <=count1+1;
+                count1 = count1 + 1;
             end
     end
-
+    
+    assign led = ledrf;
+    
     /*always @ (posedge clk)
     begin 
         if(reset1==0)
@@ -83,7 +85,7 @@ module top #(parameter WIDTH =32 )
                         btn);
 
     //7段数码管显示
-    seg7_display IO(clk1,
+    seg7_display IO(clk,
                     rd3,
                     seg7,
                     scan);
@@ -261,8 +263,8 @@ module exmemory #(parameter WIDTH =32)
     
     initial
 	begin
-        // $readmemh("Memory.dat",RAM);
-	    RAM[0] <=32'b00000000000000000000000000000000;  
+        $readmemh("C:/Users/zg13/Desktop/H2B Trainer/memory.dat",RAM);
+	    // RAM[0] <=32'b00000000000000000000000000000000;  
 	end
 
     always @(posedge clk)
@@ -694,9 +696,9 @@ module regfile #(parameter WIDTH=32,REGBITS=5)
     initial
     begin
         //$readmemh("regfile.dat",RAM);
-	    RAM2[0] <=32'b00000000000000000000000000000000;
-        RAM2[15] <=32'b00000000000000000000000000000000;    // 默认灯全灭
-        RAM2[16] <=32'b00000000000000000000000000000000;    // 默认显示0000
+	    RAM2[0] <= 32'b00000000000000000000000000000000;
+        RAM2[15] <= 32'b00000000000000001010101010101010;    // 默认灯全灭
+        RAM2[16] <= 32'b00000000000000001000100010001000;    // 默认显示8888
     end
 
     always @(posedge clk)
@@ -708,11 +710,13 @@ module regfile #(parameter WIDTH=32,REGBITS=5)
             else if(btn[4]==1)  RAM2[8]=1;
             else    RAM2[8]=0;
             //RAM2[8]=btn[4:0];
+            
             RAM2[14][15:0]=SW[15:0];
+            
             if(regwrite)
                 RAM2[wa]<=wd;
         end
-
+    
     assign rd1 = ra1 ? RAM2[ra1]:0;     // $zero
     assign rd2 = ra2 ? RAM2[ra2]:0;
     assign rd3 = RAM2[16];      // seg7
