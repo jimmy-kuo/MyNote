@@ -86,13 +86,17 @@
 ### 算法导论学习
 
 
-[我的算法学习笔记](http://www.jianshu.com/p/47993296f7f8)
+[我的算法学习笔记](http://www.jianshu.com/p/47993296f7f8)        
 [算法学习笔记(爬山,退火,遗传算法)](http://www.jianshu.com/p/46d845442afb)
 
 ### LeetCode 算法习题
 
 * Java 实现
 * C 实现
+
+### 算法学习
+
+* 退火算法
 
 
 # 数据结构
