@@ -87,6 +87,7 @@
 
 
 [我的算法学习笔记](http://www.jianshu.com/p/47993296f7f8)
+[算法学习笔记(爬山,退火,遗传算法)](http://www.jianshu.com/p/46d845442afb)
 
 ### LeetCode 算法习题
 
