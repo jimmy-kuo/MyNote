@@ -17,7 +17,7 @@
 #### 优秀源码赏析
 
 * 快速平方根算法
-* kilo (*1000行的源文本编辑器*) [[github源码地址]](https://github.com/antirez/kilo)
+* [kilo](https://github.com/antirez/kilo) (*1000行的源文本编辑器*) 
 
 #### 个人项目
 
