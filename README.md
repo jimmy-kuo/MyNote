@@ -183,6 +183,8 @@
 ### 博客摘要
 * [编程的智慧](http://www.yinwang.org/blog-cn/2015/11/21/programming-philosophy)————王垠
 * [如何掌握所有的程序语言](http://www.yinwang.org/blog-cn/2017/07/06/master-pl)————王垠
+* [The Magpie Developer](https://news.cnblogs.com/n/544167/)————CODING HORROR
+* [Teach Yourself Programmingin 10 Years](http://blog.jobbole.com/22905/)————Peter Norvig
 
 ## About
 * [`13的博客](http://www.jianshu.com/u/75156f101757)		
