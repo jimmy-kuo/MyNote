@@ -180,6 +180,10 @@
 * RFC 3912
 * RFC 1035 + 1034 (DNS zonefile 文件格式)
 
+### 博客摘要
+* [编程的智慧](http://www.yinwang.org/blog-cn/2015/11/21/programming-philosophy)————王垠
+* [如何掌握所有的程序语言](http://www.yinwang.org/blog-cn/2017/07/06/master-pl)————王垠
+
 ## About
 * [`13的博客](http://www.jianshu.com/u/75156f101757)		
 * z.g.13@163.com/h.j.13.new@gmail.com		
