@@ -127,6 +127,7 @@
 
 #### 数据库设计项目
 
+*  某BJWAZWA系统
 *  WHOIS存储系统
 *  恶意域名 监控系统
 
@@ -192,8 +193,8 @@
 * [Teach Yourself Programmingin 10 Years](http://blog.jobbole.com/22905/)————Peter Norvig
 
 ## About
-* [`13的博客](http://www.jianshu.com/u/75156f101757)		
-* z.g.13@163.com/h.j.13.new@gmail.com		
-* Harbin Institute of Technology at Weihai		
+[`13的博客](http://www.jianshu.com/u/75156f101757)	  									 
+z.g.13@163.com/h.j.13.new@gmail.com				  				
+Harbin Institute of Technology at Weihai		  					
 
 
