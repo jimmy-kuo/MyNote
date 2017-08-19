@@ -72,7 +72,7 @@
 ## Verilog DHL
 
 #### 学习笔记
-* [硬件描述语言 DHL 学习笔记](http://www.jianshu.com/p/1802f7efe030)
+* [硬件描述语言 Verilog DHL 学习笔记](http://www.jianshu.com/p/1802f7efe030)
 
 #### 项目
 * 同步FIFO的实现
@@ -116,10 +116,11 @@
 # 数据库
 
 ### MySQL 
-参考书籍
-《**MySQL 管理之道** *性能调优,高可用性监控*》
-《**MySQL内核** InnoDB存储引擎》
-《MySQL 必知必会》
+
+参考书籍    
+《**MySQL 管理之道** *性能调优,高可用性监控*》  
+《**MySQL内核** InnoDB存储引擎》		  
+《MySQL 必知必会》				  
 
 * 基于MySQLdb的数据库python脚本(高效,易用,易扩展)
 * 基于InnoDB的MySQL优化my.ini
@@ -192,9 +193,10 @@
 * [The Magpie Developer](https://news.cnblogs.com/n/544167/)————CODING HORROR
 * [Teach Yourself Programmingin 10 Years](http://blog.jobbole.com/22905/)————Peter Norvig
 
-## About
-[`13的博客](http://www.jianshu.com/u/75156f101757)	  									 
-z.g.13@163.com/h.j.13.new@gmail.com				  				
-Harbin Institute of Technology at Weihai		  					
+## Contact
 
+`13                                         
+z.g.13@163.com/h.j.13.new@gmail.com                 
+Harbin Institute of Technology at Weihai     
 
+[`13的博客](http://www.jianshu.com/u/75156f101757)	  							
