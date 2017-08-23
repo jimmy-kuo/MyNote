@@ -6,8 +6,10 @@ out
 *.iml
 *.conf
 *.ppt
-*.word
 *.xls
+*.xlsx
 *.pptx
 *.exe
 *.class
+*.doc
+*.docx

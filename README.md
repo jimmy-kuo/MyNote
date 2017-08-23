@@ -19,10 +19,10 @@
 * 快速平方根算法
 * [kilo](https://github.com/antirez/kilo) (*1000行的源文本编辑器*) 
 
-#### 个人项目
+#### 练习项目
 
-* 学生管理系统
-* 基于socket的网络文件传输 (*C/S结构*)
+* [学生管理系统](https://github.com/h-j-13/MyNote/tree/master/Programming%20language/C/Stu_info_sys%201.1)
+* [基于socket的网络文件传输 (*C/S结构*)](https://github.com/h-j-13/MyNote/tree/master/Programming%20language/C/Socket%20transferring%20files)
 
 
 
@@ -35,17 +35,17 @@
 
 * STL源码赏析
 
-#### 个人项目
+#### 练习项目
 
 * 控制台实现的小游戏
-	* 西洋棋
-	* 坦克大战
+	* [西洋棋](https://github.com/h-j-13/MyNote/tree/master/Programming%20language/C%2B%2B/games/%E7%9C%8B%E9%97%A8%E7%8B%97-chess)
+	* [坦克大战](https://github.com/h-j-13/MyNote/tree/master/Programming%20language/C%2B%2B/games/%E7%82%AE%E5%8F%B0)
 
 ## Java
 
 #### 学习笔记
 
-* Java 特性学习笔记
+* [Java 特性学习笔记](https://github.com/h-j-13/MyNote/tree/master/Programming%20language/Java/Java%20program%20experiment)
 
 ## Python
 参考书籍 
@@ -61,13 +61,23 @@
 
 #### 学习笔记
 
-* Python 自用工具代码库
+* [Python 自用工具代码库](https://github.com/h-j-13/MyLib)
+
+#### 个人项目
+
+* 基于RabbitMQ的分布式域名WHOIS获取系统
+* [com域名一级WHOIS信息获取](https://github.com/h-j-13/com_top_whois_service)
+* 域名WHOIS数据获取系统
+* [\* 部分域名与WHOIS相关项目](https://github.com/h-j-13/Domain-Whois)
 
 ## Scheme
 
 #### 学习笔记
-* Scheme 学习笔记
-* 《计算机程序的构造和解释》 学习笔记及部分例题答案 
+* [Scheme 学习笔记](https://github.com/h-j-13/MyNote/tree/master/Programming%20language/Scheme/note)
+* [《计算机程序的构造和解释》 学习笔记及部分例题答案](https://github.com/h-j-13/MyNote/tree/master/Programming%20language/Scheme/SICP)
+
+#### 项目
+*  自举的Scheme解释器 - [Schemyself](https://github.com/h-j-13/Schemyself)
 
 ## Verilog DHL
 
@@ -75,28 +85,27 @@
 * [硬件描述语言 Verilog DHL 学习笔记](http://www.jianshu.com/p/1802f7efe030)
 
 #### 项目
-* 同步FIFO的实现
-* MPIS风格CPU的实现
+* [同步sync FIFO实现](https://github.com/h-j-13/MyNote/tree/master/Programming%20language/Verilog/sync_FIFO)
+* [MPIS风格CPU实现](https://github.com/h-j-13/MyNote/tree/master/Programming%20language/Verilog/mips_CPU)
 
 # 算法
 参考书籍
 《**算法导论**》
 
 
-### 算法导论学习
+### 算法导论 & 学习笔记
 
 
-[我的算法学习笔记](http://www.jianshu.com/p/47993296f7f8)        
-[算法学习笔记(爬山,退火,遗传算法)](http://www.jianshu.com/p/46d845442afb)
+[我的算法学习笔记](http://www.jianshu.com/p/47993296f7f8)   
+[分治法学习笔记——最近点对问题](http://www.jianshu.com/p/8bc681afbaff)     
+[算法学习笔记(爬山,退火,遗传算法)](http://www.jianshu.com/p/46d845442afb)		  
+[机器学习 学习笔记（一） 基于朴素贝叶斯的文本分类 （Python 实现）](http://www.jianshu.com/p/5fd446efefe9)
+
 
 ### LeetCode 算法习题
 
-* Java 实现
-* C 实现
-
-### 算法学习
-
-* 退火算法
+* [Java 实现](https://github.com/h-j-13/MyNote/tree/master/Algorithm/Leetcode_for_13/Java)
+* [C/C++ 实现](https://github.com/h-j-13/MyNote/tree/master/Algorithm/Leetcode_for_13/C%26C%2B%2B)
 
 
 # 数据结构
@@ -105,13 +114,19 @@
 
 #### STL 框架学习
 
+* STL 源码解析
+
 #### 数据结果学习笔记与源码实现
 
-* 链表
-* 栈 *FILO*
-* 队列 *FIFO*
-* 树 (*二叉树/B树/B+树*)
-* 图
+* [基于数组实现的链表](https://github.com/h-j-13/MyNote/tree/master/Data%20structure/array2LinkedList)
+* [2个栈实现的队列](https://github.com/h-j-13/MyNote/tree/master/Data%20structure/queueBy2Stack)
+* [基于栈的迷宫问题求解](https://github.com/h-j-13/MyNote/tree/master/Data%20structure/stackForPuzzle)
+* [数据结构实验](https://github.com/h-j-13/MyNote/tree/master/Data%20structure/DataStructureExperiment)
+  * 链表
+  * 栈 *FILO*
+  * 队列 *FIFO*
+  * 树 (*二叉树/B树/B+树*)
+  * 图
 
 # 数据库
 
@@ -125,6 +140,11 @@
 * 基于MySQLdb的数据库python脚本(高效,易用,易扩展)
 * 基于InnoDB的MySQL优化my.ini
 * [MySQL 5.7.18 安装及使用及调优过程记录](http://www.jianshu.com/p/08c064d93d34)
+* [数据库设计范式](http://www.jianshu.com/p/24a4c5df7193)
+* [【转载】MySQL 高性能表设计规范](http://www.jianshu.com/p/8f68a8203417)
+* [【转载】 MySQL 索引背后的数据结构及算法原理](http://www.jianshu.com/p/ee7b51056e06)
+
+
 
 #### 数据库设计项目
 
@@ -154,7 +174,7 @@
 
 
 ### SQL 语句　 
-* Leetcode 数据库习题
+* [Leetcode 数据库习题](http://www.jianshu.com/nb/15744112)
 
 # 开源框架与开源项目
 
@@ -163,7 +183,7 @@
 
 
 #### 个人项目
-* 基于Scrapy的新浪新闻爬虫
+* [基于Scrapy的新浪新闻爬虫](https://github.com/h-j-13/MyNote/tree/master/Open%20Source/Scrapy/sina_news_Scrapy)
 
 ### RabbitMQ
 参考书籍
@@ -178,6 +198,7 @@
 
 #### 个人项目
 * 基于QT的源代码编辑器 - [Racoon](https://github.com/h-j-13/Racoon)
+* 油水混合管道含水率分析系统 - Tinshine
 
 # Document
 *学习过程部分自翻文档*
@@ -193,9 +214,9 @@
 * [The Magpie Developer](https://news.cnblogs.com/n/544167/)————CODING HORROR
 * [Teach Yourself Programmingin 10 Years](http://blog.jobbole.com/22905/)————Peter Norvig
 
-## Contact
+# Contact
 
-`13                                         
+H-J-13(@`13)                                         
 z.g.13@163.com/h.j.13.new@gmail.com                 
 Harbin Institute of Technology at Weihai     
 
