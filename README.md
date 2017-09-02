@@ -192,6 +192,17 @@
 #### 个人项目
 * 基于AMPQ的分布式WHOIS获取系统
 
+# Web & APP
+
+### RESTful API
+学习笔记
+* [【转载、整理】RESTful API 设计指南](http://www.jianshu.com/p/29453a0da748)
+
+#### 个人项目
+
+* 某系统 RESTful 风格后台
+
+
 # GUI
 
 ### QT
