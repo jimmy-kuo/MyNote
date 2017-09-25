@@ -100,6 +100,8 @@
 [分治法学习笔记——最近点对问题](http://www.jianshu.com/p/8bc681afbaff)     
 [算法学习笔记(爬山,退火,遗传算法)](http://www.jianshu.com/p/46d845442afb)		  
 [机器学习 学习笔记（一） 基于朴素贝叶斯的文本分类 （Python 实现）](http://www.jianshu.com/p/5fd446efefe9)
+* 密码学
+  * [DES 算法实现](https://gist.github.com/h-j-13/1d1d2a29973b7dad29467e6d316f98ad)
 
 
 ### LeetCode 算法习题
