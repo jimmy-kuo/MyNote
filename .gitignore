@@ -13,3 +13,6 @@ out
 *.class
 *.doc
 *.docx
+
+~.*
+*.swp
