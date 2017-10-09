@@ -102,6 +102,7 @@
 [机器学习 学习笔记（一） 基于朴素贝叶斯的文本分类 （Python 实现）](http://www.jianshu.com/p/5fd446efefe9)
 * 密码学
   * [DES 算法实现](https://gist.github.com/h-j-13/1d1d2a29973b7dad29467e6d316f98ad)
+  * [RSA 算法实现、素性检测](https://gist.github.com/h-j-13/6880e9a9e580a95357213fddb56121fd)
 
 
 ### LeetCode 算法习题
