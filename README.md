@@ -88,6 +88,13 @@
 * [同步sync FIFO实现](https://github.com/h-j-13/MyNote/tree/master/Programming%20language/Verilog/sync_FIFO)
 * [MPIS风格CPU实现](https://github.com/h-j-13/MyNote/tree/master/Programming%20language/Verilog/mips_CPU)
 
+## 汇编
+
+#### 学习笔记
+* 汇编学习笔记
+* 《汇编程序语言设计》 部分习题解答
+
+
 # 算法
 参考书籍
 《**算法导论**》
