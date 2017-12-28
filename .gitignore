@@ -1,6 +1,7 @@
 *.log
 *.pyc
 .idea
+cmake-build-debug
 *.xml
 out
 *.iml
