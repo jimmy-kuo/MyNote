@@ -23,8 +23,9 @@
 
 * [学生管理系统](https://github.com/h-j-13/MyNote/tree/master/Programming%20language/C/Stu_info_sys%201.1)
 * [基于socket的网络文件传输 (*C/S结构*)](https://github.com/h-j-13/MyNote/tree/master/Programming%20language/C/Socket%20transferring%20files)
-
-
+* 基于Windows的网络编程实验
+  * TCP - 时间同步服务器实现
+  * TCP - 回射服务器实现(定长接收,变长接受,多线程处理请求方式)
 
 ## C++
 参考书籍 

@@ -1,42 +1,67 @@
 #include<winsock2.h>
 #include<stdio.h>
+#include<string.h>
 
 #pragma comment(lib, "ws2_32.lib")
 
 /**
- * å“ˆå°”æ»¨å·¥ä¸šå¤§å­¦(å¨æµ·) è®¡ç®—æœºç½‘ç»œ II
- * å®éªŒ1 - æ—¶é—´åŒæ­¥æœåŠ¡å™¨
+ * ¹ş¶û±õ¹¤Òµ´óÑ§(Íşº£) ¼ÆËã»úÍøÂç II
+ * ÊµÑé1 - Ê±¼äÍ¬²½·şÎñÆ÷
  *
- * clinet - å®¢æˆ·ç«¯
+ * clinet - ¿Í»§¶Ë
  * @author  h-j-13(140420227)
- * @time    2017å¹´12æœˆ24æ—¥
+ * @time    2017Äê12ÔÂ24ÈÕ
  * */
 
 #define PORT 6013
-#define SEND_CHAR_LENGTH 100
+#define RECV_CHAR 10
 
 int main(void) {
     WSADATA wsaData;
-    SOCKET sockClient;                                                          //å®¢æˆ·ç«¯Socket
-    SOCKADDR_IN addrServer;                                                     //æœåŠ¡ç«¯åœ°å€
+    SOCKET sockClient;                                                          //¿Í»§¶ËSocket
+    SOCKADDR_IN addrServer;                                                     //·şÎñ¶ËµØÖ·
     WSAStartup(MAKEWORD(2, 2), &wsaData);
-    //æ–°å»ºå®¢æˆ·ç«¯socket
+    //ĞÂ½¨¿Í»§¶Ësocket
     sockClient = socket(AF_INET, SOCK_STREAM, 0);
 
-    //å®šä¹‰è¦è¿æ¥çš„æœåŠ¡ç«¯åœ°å€
-    addrServer.sin_addr.S_un.S_addr = inet_addr("127.0.0.1");                   //ç›®æ ‡IP(127.0.0.1æ˜¯å›é€åœ°å€)
+    //¶¨ÒåÒªÁ¬½ÓµÄ·şÎñ¶ËµØÖ·
+    addrServer.sin_addr.S_un.S_addr = inet_addr("127.0.0.1");                   //Ä¿±êIP(127.0.0.1ÊÇ»ØËÍµØÖ·)
     addrServer.sin_family = AF_INET;
-    addrServer.sin_port = htons(PORT);                                          //è¿æ¥ç«¯å£6000
+    addrServer.sin_port = htons(PORT);                                          //Á¬½Ó¶Ë¿Ú6000
 
-    //è¿æ¥åˆ°æœåŠ¡ç«¯
-    connect(sockClient, (SOCKADDR *) &addrServer, sizeof(SOCKADDR));
+    //Á¬½Óµ½·şÎñ¶Ë
+    if (connect(sockClient, (SOCKADDR *) &addrServer, sizeof(SOCKADDR)) != 0) {
+        printf("Á´½ÓÊ±¼äÍ¬²½·şÎñÆ÷Ê§°Ü\n");
+        closesocket(sockClient);
+        WSACleanup();
+        return 0;
+    };
 
-    //æ¥å—æ•°æ®
-    char message[SEND_CHAR_LENGTH] = "";
-    recv(sockClient, message, SEND_CHAR_LENGTH, 0);
-    printf("æ¥æ”¶åˆ°æœåŠ¡å™¨æ—¶é—´ä¸º : %s",message);
+    //Ê¹ÓÃ recv() º¯ÊıÑ­»·½ÓÊÜÊı¾İ
+    int recv_result = RECV_CHAR;
+    char message[RECV_CHAR + 1] = "";
+    char result[RECV_CHAR * 100] = "";                                          // Ò»¸ö×ã¹»´óµÄ½á¹û×Ö·û´®Êı×é
+    while (recv_result > 0) {
+        // Ñ­»·½ÓÊÜÊı¾İ
+        recv_result = recv(sockClient, message, RECV_CHAR, 0);
+        if (recv_result == 0) {
+            printf("·şÎñÆ÷¹Ø±ÕÁËÁ´½Ó\n");
+            shutdown(sockClient, SD_RECEIVE);
+        } else if (recv_result == SOCKET_ERROR) {
+            printf("½ÓÊÕÊı¾İ¹ı³Ì·¢ÉúÁË´íÎó:%d", WSAGetLastError());
+            closesocket(sockClient);
+            WSACleanup();
+        } else if (recv_result > 0) {
+            printf("½ÓÊÕµ½ÁË%d¸ö×Ö½Ú:", recv_result);
+            printf("%s\n", message);
+            strcat(result, message);
+        }
 
-    //å…³é—­socket
+    }
+
+    printf("½ÓÊÕµ½·şÎñÆ÷Ê±¼äÎª:%s", result);
+
+    //¹Ø±Õsocket
     closesocket(sockClient);
     WSACleanup();
 
