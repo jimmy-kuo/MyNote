@@ -6,30 +6,30 @@
 #pragma comment(lib, "ws2_32.lib")
 
 // note
-// ÇëÔÚ±àÒëÊ±Ìí¼Ó¶îÍâ²ÎÊı -lwsock32 (gcc)
+// è¯·åœ¨ç¼–è¯‘æ—¶æ·»åŠ é¢å¤–å‚æ•° -lwsock32 (gcc)
 
 /**
- * ¹ş¶û±õ¹¤Òµ´óÑ§(Íşº£) ¼ÆËã»úÍøÂç II
- * ÊµÑé1 - Ê±¼äÍ¬²½·şÎñÆ÷
+ * å“ˆå°”æ»¨å·¥ä¸šå¤§å­¦(å¨æµ·) è®¡ç®—æœºç½‘ç»œ II
+ * å®éªŒ1 - æ—¶é—´åŒæ­¥æœåŠ¡å™¨
  *
- * server - ·şÎñÆ÷¶Ë
+ * server - æœåŠ¡å™¨ç«¯
  * @author  h-j-13(140420227)
- * @time    2017Äê12ÔÂ24ÈÕ
+ * @time    2017å¹´12æœˆ24æ—¥
  * */
 
 #define PORT 6013
 
 int get_local_time_str(char *time_str)
-{/** »ñÈ¡±¾µØÊ±¼ä×Ö·û´®*/
-    // Çå¿ÕÔ­Ê¼ÄÚÈİ
+{/** è·å–æœ¬åœ°æ—¶é—´å­—ç¬¦ä¸²*/
+    // æ¸…ç©ºåŸå§‹å†…å®¹
     memset(time_str, 0, sizeof(time_str));
     char local_time[20] = "";
-    // »ñÈ¡µ±Ç°ÊÀ½ç
+    // è·å–å½“å‰ä¸–ç•Œ
     time_t now;
     struct tm *timenow;
     time(&now);
     timenow = localtime(&now);
-    // ¸ñÊ½»¯±¾µØÊ±¼ä×Ö·û´®
+    // æ ¼å¼åŒ–æœ¬åœ°æ—¶é—´å­—ç¬¦ä¸²
     char *time_format = "%Y-%m-%d %H:%M:%S";
     strftime(local_time, sizeof(local_time), time_format, timenow);
     strncat(time_str, local_time, sizeof(local_time));
@@ -40,39 +40,39 @@ int get_local_time_str(char *time_str)
 int main(void)
 {
 
-    // »ñÈ¡±¾µØÊ±¼ä
+    // è·å–æœ¬åœ°æ—¶é—´
     char local_time_str[20] = "1970-01-01 00:00:00";
     get_local_time_str(local_time_str);
 
-    // ³õÊ¼»¯socket
+    // åˆå§‹åŒ–socket
     WSADATA wsaData;
     WSAStartup(MAKEWORD(2, 2), &wsaData);
     SOCKET sockServer, sockClient;
     SOCKADDR_IN addrServer, addrClient;
 
 
-    // ´´½¨socket¶ÔÏó
+    // åˆ›å»ºsocketå¯¹è±¡
     sockServer = socket(AF_INET, SOCK_STREAM, 0);
-    addrServer.sin_addr.S_un.S_addr = htonl(INADDR_ANY);            //INADDR_ANY±íÊ¾ÈÎºÎIP
-    addrServer.sin_family = AF_INET;                                //IPv4Ğ­Òé×å
-    addrServer.sin_port = htons(PORT);                              //°ó¶¨¶Ë¿Ú
+    addrServer.sin_addr.S_un.S_addr = htonl(INADDR_ANY);            //INADDR_ANYè¡¨ç¤ºä»»ä½•IP
+    addrServer.sin_family = AF_INET;                                //IPv4åè®®æ—
+    addrServer.sin_port = htons(PORT);                              //ç»‘å®šç«¯å£
     bind(sockServer, (SOCKADDR *) &addrServer, sizeof(SOCKADDR));
 
-    //Listen¼àÌı¶Ë
-    listen(sockServer, 5);                                          //5ÎªµÈ´ıÁ¬½ÓÊıÄ¿
-    printf("·şÎñÆ÷Æô¶¯: ¼àÌı %d ¶Ë¿Ú...\n", PORT);
+    //Listenç›‘å¬ç«¯
+    listen(sockServer, 5);                                          //5ä¸ºç­‰å¾…è¿æ¥æ•°ç›®
+    printf("æœåŠ¡å™¨å¯åŠ¨: ç›‘å¬ %d ç«¯å£...\n", PORT);
     int len = sizeof(SOCKADDR);
-    char *sendBuf;                                                  //·¢ËÍÖÁ¿Í»§¶ËµÄ×Ö·û´®
+    char *sendBuf;                                                  //å‘é€è‡³å®¢æˆ·ç«¯çš„å­—ç¬¦ä¸²
     sendBuf = local_time_str;
 
-    //»á×èÈû½ø³Ì£¬Ö±µ½ÓĞ¿Í»§¶ËÁ¬½ÓÉÏÀ´ÎªÖ¹
+    //ä¼šé˜»å¡è¿›ç¨‹ï¼Œç›´åˆ°æœ‰å®¢æˆ·ç«¯è¿æ¥ä¸Šæ¥ä¸ºæ­¢
     sockClient = accept(sockServer, (SOCKADDR *) &addrClient, &len);
 
-    //½ÓÊÕ²¢´òÓ¡¿Í»§¶ËÊı¾İ
+    //æ¥æ”¶å¹¶æ‰“å°å®¢æˆ·ç«¯æ•°æ®
     send(sockClient, sendBuf, strlen(sendBuf) + 1, 0);
-    printf("ÒÑ·¢ËÍ±¾µØÊ±¼ä,¼´½«¹Ø±ÕÁ´½Ó\n");
+    printf("å·²å‘é€æœ¬åœ°æ—¶é—´,å³å°†å…³é—­é“¾æ¥\n");
 
-    //¹Ø±Õsocket¡¢ÇåÀí
+    //å…³é—­socketã€æ¸…ç†
     shutdown(sockClient, SD_SEND);
     closesocket(sockClient);
     closesocket(sockServer);

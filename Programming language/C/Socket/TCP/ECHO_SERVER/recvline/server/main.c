@@ -6,13 +6,13 @@
 #pragma comment(lib, "ws2_32.lib")
 
 /**
- * ¹þ¶û±õ¹¤Òµ´óÑ§(Íþº£) ¼ÆËã»úÍøÂç II
- * ÊµÑé1 - »ØÉä·þÎñÆ÷
- * a.recvlineÐÎÊ½
+ * å“ˆå°”æ»¨å·¥ä¸šå¤§å­¦(å¨æµ·) è®¡ç®—æœºç½‘ç»œ II
+ * å®žéªŒ1 - å›žå°„æœåŠ¡å™¨
+ * a.recvlineå½¢å¼
  *
- * server - ·þÎñÆ÷¶Ë
+ * server - æœåŠ¡å™¨ç«¯
  * @author  h-j-13(140420227)
- * @time    2018Äê1ÔÂ7ÈÕ
+ * @time    2018å¹´1æœˆ7æ—¥
  * */
 
 #define PORT 6013
@@ -21,29 +21,29 @@
 
 int main(void)
 {
-    // ³õÊ¼»¯socket
+    // åˆå§‹åŒ–socket
     WSADATA wsaData;
     WSAStartup(MAKEWORD(2, 2), &wsaData);
     SOCKET sockServer, sockClient;
     SOCKADDR_IN addrServer, addrClient;
 
-    // ´´½¨socket¶ÔÏó
+    // åˆ›å»ºsocketå¯¹è±¡
     sockServer = socket(AF_INET, SOCK_STREAM, 0);
-    addrServer.sin_addr.S_un.S_addr = htonl(INADDR_ANY);            //INADDR_ANY±íÊ¾ÈÎºÎIP
-    addrServer.sin_family = AF_INET;                                //IPv4Ð­Òé×å
-    addrServer.sin_port = htons(PORT);                              //°ó¶¨¶Ë¿Ú
+    addrServer.sin_addr.S_un.S_addr = htonl(INADDR_ANY);            //INADDR_ANYè¡¨ç¤ºä»»ä½•IP
+    addrServer.sin_family = AF_INET;                                //IPv4åè®®æ—
+    addrServer.sin_port = htons(PORT);                              //ç»‘å®šç«¯å£
     bind(sockServer, (SOCKADDR *) &addrServer, sizeof(SOCKADDR));
 
-    //Listen¼àÌý¶Ë
-    listen(sockServer, 5);                                          //5ÎªµÈ´ýÁ¬½ÓÊýÄ¿
-    printf("·þÎñÆ÷Æô¶¯: ¼àÌý %d ¶Ë¿Ú...\n", PORT);
+    //Listenç›‘å¬ç«¯
+    listen(sockServer, 5);                                          //5ä¸ºç­‰å¾…è¿žæŽ¥æ•°ç›®
+    printf("æœåŠ¡å™¨å¯åŠ¨: ç›‘å¬ %d ç«¯å£...\n", PORT);
 
     int len = sizeof(SOCKADDR);
-    char send_buf[BUF] = "";                                        //·¢ËÍ×Ö·û»º³åÇø
-    char recv_buf[BUF] = "";                                        //½ÓÊÜ×Ö·û»º³åÇø
+    char send_buf[BUF] = "";                                        //å‘é€å­—ç¬¦ç¼“å†²åŒº
+    char recv_buf[BUF] = "";                                        //æŽ¥å—å­—ç¬¦ç¼“å†²åŒº
     int connect_cnt = MAX_CONNECT_TIME;
 
-    // Ñ­»·½ÓÊÜ¿Í»§¶ËÇëÇó
+    // å¾ªçŽ¯æŽ¥å—å®¢æˆ·ç«¯è¯·æ±‚
     while (connect_cnt--)
     {
         sockClient = accept(sockServer, (SOCKADDR *) &addrClient, &len);
@@ -51,10 +51,10 @@ int main(void)
 
         while (1)
         {
-            if(recv(sockClient, recv_buf, BUF, 0)==0)               // ¿Í»§¶Ë¶Ï¿ªÁ¬½ÓÊ±¶Ï¿ªÁ´Á´½Ó
+            if(recv(sockClient, recv_buf, BUF, 0)==0)               // å®¢æˆ·ç«¯æ–­å¼€è¿žæŽ¥æ—¶æ–­å¼€é“¾é“¾æŽ¥
                 break;
             printf("recv>%s\n",recv_buf);
-            sprintf(send_buf, "echo:%s", recv_buf);                 // »ØÉä×Ö·û´®
+            sprintf(send_buf, "echo:%s", recv_buf);                 // å›žå°„å­—ç¬¦ä¸²
             send(sockClient, send_buf, BUF, 0);
         }
         shutdown(sockClient,SD_BOTH);

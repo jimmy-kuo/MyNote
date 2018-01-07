@@ -6,13 +6,13 @@
 #pragma comment(lib, "ws2_32.lib")
 
 /**
- * ¹þ¶û±õ¹¤Òµ´óÑ§(Íþº£) ¼ÆËã»úÍøÂç II
- * ÊµÑé1 - »ØÉä·þÎñÆ÷
- * c.recvvl ÐÎÊ½
+ * å“ˆå°”æ»¨å·¥ä¸šå¤§å­¦(å¨æµ·) è®¡ç®—æœºç½‘ç»œ II
+ * å®žéªŒ1 - å›žå°„æœåŠ¡å™¨
+ * c.recvvl å½¢å¼
  *
- * server - ·þÎñÆ÷¶Ë
+ * server - æœåŠ¡å™¨ç«¯
  * @author  h-j-13(140420227)
- * @time    2018Äê1ÔÂ7ÈÕ
+ * @time    2018å¹´1æœˆ7æ—¥
  * */
 
 #define PORT 6013
@@ -20,27 +20,27 @@
 #define MAX_CONNECT_TIME 5
 
 int recvn(SOCKET s, char *recvbuf, unsigned int fixedlen)
-{/** socket½ÓÊÜ¶¨³¤×Ö·û´® */
-    int iResult;                                            //´æ´¢µ¥´Îrecv²Ù×÷µÄ·µ»ØÖµ
-    int cnt;                                                //ÓÃÓÚÍ³¼ÆÏà¶ÔÓÚ¹Ì¶¨³¤¶È£¬Ê£Óà¶àÉÙ×Ö½ÚÉÐÎ´½ÓÊÕ
+{/** socketæŽ¥å—å®šé•¿å­—ç¬¦ä¸² */
+    int iResult;                                            //å­˜å‚¨å•æ¬¡recvæ“ä½œçš„è¿”å›žå€¼
+    int cnt;                                                //ç”¨äºŽç»Ÿè®¡ç›¸å¯¹äºŽå›ºå®šé•¿åº¦ï¼Œå‰©ä½™å¤šå°‘å­—èŠ‚å°šæœªæŽ¥æ”¶
     cnt = fixedlen;
     char *pp = recvbuf;
     while (cnt > 0)
     {
         iResult = recv(s, pp, 5, 0);
         if (iResult < 0)
-        {//Êý¾Ý½ÓÊÕ³öÏÖ´íÎó£¬·µ»ØÊ§°Ü
-            printf("½ÓÊÕ·¢Éú´íÎó: %d\n", WSAGetLastError());
+        {//æ•°æ®æŽ¥æ”¶å‡ºçŽ°é”™è¯¯ï¼Œè¿”å›žå¤±è´¥
+            printf("æŽ¥æ”¶å‘ç”Ÿé”™è¯¯: %d\n", WSAGetLastError());
             return -1;
         }
         if (iResult == 0)
-        {//¶Ô·½¹Ø±ÕÁ¬½Ó£¬·µ»ØÒÑ½ÓÊÕµ½µÄÐ¡ÓÚfixedlenµÄ×Ö½ÚÊý
-            printf("Á¬½Ó¹Ø±Õ\n");
+        {//å¯¹æ–¹å…³é—­è¿žæŽ¥ï¼Œè¿”å›žå·²æŽ¥æ”¶åˆ°çš„å°äºŽfixedlençš„å­—èŠ‚æ•°
+            printf("è¿žæŽ¥å…³é—­\n");
             return fixedlen - cnt;
         }
-        //printf("½ÓÊÕµ½µÄ×Ö½ÚÊý: %d\n", iResult);
-        pp += iResult;                                              //½ÓÊÕ»º´æÖ¸ÕëÏòºóÒÆ¶¯
-        cnt -= iResult;                                             //¸üÐÂcntÖµ
+        //printf("æŽ¥æ”¶åˆ°çš„å­—èŠ‚æ•°: %d\n", iResult);
+        pp += iResult;                                              //æŽ¥æ”¶ç¼“å­˜æŒ‡é’ˆå‘åŽç§»åŠ¨
+        cnt -= iResult;                                             //æ›´æ–°cntå€¼
 
     }
 
@@ -48,48 +48,48 @@ int recvn(SOCKET s, char *recvbuf, unsigned int fixedlen)
 }
 
 int recvvl(SOCKET s, char *recvbuf, unsigned int recvbuflen)
-{/** ½ÓÊÜ±ä³¤×Ö·û´® */
+{/** æŽ¥å—å˜é•¿å­—ç¬¦ä¸² */
     int iResult;
     char length[sizeof(unsigned int) + 1];
     unsigned int reclen;
 
-    //½ÓÊÕµ½ÏûÏ¢³¤¶È
+    //æŽ¥æ”¶åˆ°æ¶ˆæ¯é•¿åº¦
     iResult = recv(s, length, 4, 0);
-    printf("±ä³¤ÏûÏ¢³¤¶È:%s\n", length);
-    reclen = atoi(length);                                          //½«×Ö·û´®±äÎªÕûÊý
+    printf("å˜é•¿æ¶ˆæ¯é•¿åº¦:%s\n", length);
+    reclen = atoi(length);                                          //å°†å­—ç¬¦ä¸²å˜ä¸ºæ•´æ•°
 
-    printf("Ñ­»·½ÓÊÕ³¤¶È%d\n", reclen);
-    printf("»º³åÇø¿Õ¼ä³¤¶È%d\n", recvbuflen);
-    // ÎªÁË¿É¶ÁÐÔ,¼ò»¯ÁË²¿·Ö´íÎó¼ì´í
+    printf("å¾ªçŽ¯æŽ¥æ”¶é•¿åº¦%d\n", reclen);
+    printf("ç¼“å†²åŒºç©ºé—´é•¿åº¦%d\n", recvbuflen);
+    // ä¸ºäº†å¯è¯»æ€§,ç®€åŒ–äº†éƒ¨åˆ†é”™è¯¯æ£€é”™
     return recv(s, recvbuf, reclen + 1, 0);
 }
 
 
 int main(void)
 {
-    // ³õÊ¼»¯socket
+    // åˆå§‹åŒ–socket
     WSADATA wsaData;
     WSAStartup(MAKEWORD(2, 2), &wsaData);
     SOCKET sockServer, sockClient;
     SOCKADDR_IN addrServer, addrClient;
 
-    // ´´½¨socket¶ÔÏó
+    // åˆ›å»ºsocketå¯¹è±¡
     sockServer = socket(AF_INET, SOCK_STREAM, 0);
-    addrServer.sin_addr.S_un.S_addr = htonl(INADDR_ANY);            //INADDR_ANY±íÊ¾ÈÎºÎIP
-    addrServer.sin_family = AF_INET;                                //IPv4Ð­Òé×å
-    addrServer.sin_port = htons(PORT);                              //°ó¶¨¶Ë¿Ú
+    addrServer.sin_addr.S_un.S_addr = htonl(INADDR_ANY);            //INADDR_ANYè¡¨ç¤ºä»»ä½•IP
+    addrServer.sin_family = AF_INET;                                //IPv4åè®®æ—
+    addrServer.sin_port = htons(PORT);                              //ç»‘å®šç«¯å£
     bind(sockServer, (SOCKADDR *) &addrServer, sizeof(SOCKADDR));
 
-    //Listen¼àÌý¶Ë
-    listen(sockServer, 5);                                          //5ÎªµÈ´ýÁ¬½ÓÊýÄ¿
-    printf("·þÎñÆ÷Æô¶¯: ¼àÌý %d ¶Ë¿Ú...\n", PORT);
+    //Listenç›‘å¬ç«¯
+    listen(sockServer, 5);                                          //5ä¸ºç­‰å¾…è¿žæŽ¥æ•°ç›®
+    printf("æœåŠ¡å™¨å¯åŠ¨: ç›‘å¬ %d ç«¯å£...\n", PORT);
 
     int len = sizeof(SOCKADDR);
-    char send_buf[BUF] = "";                                        //·¢ËÍ×Ö·û»º³åÇø
-    char recv_buf[BUF] = "";                                        //½ÓÊÜ×Ö·û»º³åÇø
+    char send_buf[BUF] = "";                                        //å‘é€å­—ç¬¦ç¼“å†²åŒº
+    char recv_buf[BUF] = "";                                        //æŽ¥å—å­—ç¬¦ç¼“å†²åŒº
     int connect_cnt = MAX_CONNECT_TIME;
 
-    // Ñ­»·½ÓÊÜ¿Í»§¶ËÇëÇó
+    // å¾ªçŽ¯æŽ¥å—å®¢æˆ·ç«¯è¯·æ±‚
     while (connect_cnt--)
     {
         sockClient = accept(sockServer, (SOCKADDR *) &addrClient, &len);
@@ -97,10 +97,10 @@ int main(void)
 
         while (1)
         {
-            if (recvvl(sockClient, recv_buf, BUF) == 0)               // ¿Í»§¶Ë¶Ï¿ªÁ¬½ÓÊ±¶Ï¿ªÁ´Á´½Ó
+            if (recvvl(sockClient, recv_buf, BUF) == 0)               // å®¢æˆ·ç«¯æ–­å¼€è¿žæŽ¥æ—¶æ–­å¼€é“¾é“¾æŽ¥
                 break;
             printf("recv>%s\n", recv_buf);
-            sprintf(send_buf, "echo:%s", recv_buf);                 // »ØÉä×Ö·û´®
+            sprintf(send_buf, "echo:%s", recv_buf);                 // å›žå°„å­—ç¬¦ä¸²
             send(sockClient, send_buf, BUF, 0);
         }
         shutdown(sockClient, SD_BOTH);
