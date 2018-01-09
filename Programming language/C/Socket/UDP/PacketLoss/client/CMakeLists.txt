@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 3.9)
+project(client)
+
+set(CMAKE_CXX_STANDARD 11)
+
+add_executable(client main.cpp)
+
+TARGET_LINK_LIBRARIES(client -lwsock32)
