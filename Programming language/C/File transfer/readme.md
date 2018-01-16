@@ -1,6 +1,6 @@
 # File transfer
 
-### Deatils：
+### Deatils
 点对点文件传输程序
 
 ### Feature
@@ -20,7 +20,7 @@
 * *部分参数可以在源码开头的宏定义处修改*
 * **无法穿透NAT**   
 
-## About Me：
+### About Me：
 @h-j-13      
 A student at Harbin Institute of Technology at WeiHai
 2015年10月7日
