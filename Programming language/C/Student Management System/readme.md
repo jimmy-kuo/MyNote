@@ -31,9 +31,9 @@
     * 13，展示一个学生的个人信息
 
 
-![](https://moetu.org/image/JkXX5)    
-![](https://moetu.org/image/JkMAZ)    
-![](https://moetu.org/image/Jkazm)    
+![1c408d3d388aabbd1.png](https://moetu.fastmirror.org/images/2018/01/16/1c408d3d388aabbd1.png)
+![27d6fe3efa47c2265.png](https://moetu.fastmirror.org/images/2018/01/16/27d6fe3efa47c2265.png)
+![3c414929c9df068b2.png](https://moetu.fastmirror.org/images/2018/01/16/3c414929c9df068b2.png)  
 
 ### Run：
 * run > ```SMS_main.c```
