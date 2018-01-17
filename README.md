@@ -86,14 +86,6 @@
 #### 项目
 *  自举的Scheme解释器 - [Schemyself](https://github.com/h-j-13/Schemyself)
 
-## Verilog DHL
-
-#### 学习笔记
-* [硬件描述语言 Verilog DHL 学习笔记](http://www.jianshu.com/p/1802f7efe030)
-
-#### 项目
-* [同步sync FIFO实现](https://github.com/h-j-13/MyNote/tree/master/Programming%20language/Verilog/sync_FIFO)
-* [MPIS风格CPU实现](https://github.com/h-j-13/MyNote/tree/master/Programming%20language/Verilog/mips_CPU)
 
 ## 汇编
 
@@ -103,6 +95,15 @@
 * [汇编语言 学习笔记(三)](http://houjie13.com/articles/2017/11/09/1510196323575.html)
 * [汇编语言 学习笔记(四)](http://houjie13.com/articles/2017/11/09/1510213555803.html)
 * 《汇编程序语言设计》 部分习题解答
+
+### Verilog DHL
+
+#### 学习笔记
+* [硬件描述语言 Verilog DHL 学习笔记](http://www.jianshu.com/p/1802f7efe030)
+
+#### 项目
+* [同步sync FIFO实现](https://github.com/h-j-13/MyNote/tree/master/Programming%20language/Verilog/sync_FIFO)
+* [MPIS风格CPU实现](https://github.com/h-j-13/MyNote/tree/master/Programming%20language/Verilog/mips_CPU)
 
 
 # 算法
@@ -163,8 +164,10 @@
 * [数据库设计范式](http://www.jianshu.com/p/24a4c5df7193)
 * [【转载】MySQL 高性能表设计规范](http://www.jianshu.com/p/8f68a8203417)
 * [【转载】 MySQL 索引背后的数据结构及算法原理](http://www.jianshu.com/p/ee7b51056e06)
+* [CentOS 下 MySQL 版本升级、配置调优](http://houjie13.com/articles/2018/01/17/1516181432242.html)
 
-
+#### 数据库优化
+* 生产环境下的 my.cnf 优化方案
 
 #### 数据库设计项目
 
