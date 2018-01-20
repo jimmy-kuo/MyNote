@@ -165,6 +165,7 @@
 * [【转载】MySQL 高性能表设计规范](http://www.jianshu.com/p/8f68a8203417)
 * [【转载】 MySQL 索引背后的数据结构及算法原理](http://www.jianshu.com/p/ee7b51056e06)
 * [CentOS 下 MySQL 版本升级、配置调优](http://houjie13.com/articles/2018/01/17/1516181432242.html)
+* [CentOS 下 MySQL 转移数据库目录、修复升级后的数据表结构错误](http://houjie13.com/articles/2018/01/20/1516430412509.html)
 
 #### 数据库优化
 * 生产环境下的 my.cnf 优化方案
