@@ -1,0 +1,96 @@
+{
+    /*
+    Visual Stuido Code 设置文件
+    @`13
+    */
+    "workbench.colorTheme": "One Dark Pro",
+    "workbench.iconTheme": "simple-icons",
+     // 以像素为单位控制字号。
+    "editor.fontSize": 18,
+  
+    // 控制字体系列。
+    "editor.fontFamily": "Consolas, 微软雅黑",
+    // 配置 glob 模式以在搜索中排除文件和文件夹。例如，文件资源管理器根据此设置决定文件或文件夹的显示和隐藏。
+    "files.exclude": {
+        "**/.git": true,
+        "**/.pyc": true,
+        "**/**.pyc": true,
+        "*.swp": true,
+        "*./.*swp": true,
+        "*.swo": true,
+        "*./.*swo": true,
+        "*.idea*.": true,
+        "*.vscode*.": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/**.tld_set":true
+      },
+    "code-runner.runInTerminal": false,
+    "workbench.panel.location": "bottom",
+    "explorer.confirmDelete": false,
+
+    // 控制编辑器是否应在键入后自动设置行的格式
+    "editor.formatOnType": true,
+
+    // python代码规范化 - flask8
+    // "python.linting.flake8Enabled": true,
+
+    // python代码格式化 - yapf
+    "python.formatting.provider": "yapf",
+    "explorer.confirmDragAndDrop": false,
+    "files.associations": {
+        "*.asp": "vbscript"
+    },
+
+    // git
+    "git.path": "E:/Environment/Git/cmd/git.exe",
+    "extensions.ignoreRecommendations": true,
+
+    //c
+    "C_Cpp.clang_format_fallbackStyle": "LLVM",
+    "explorer.confirmDragAndDrop": false,
+
+    //for code runner cpp
+    "code-runner.executorMap": {
+        "javascript": "node",
+        "java": "cd $dir && javac $fileName && java $fileNameWithoutExt",
+        "c": "cd $dir && gcc -g $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
+        "cpp": "cd $dir && g++ $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
+        "objective-c": "cd $dir && gcc -framework Cocoa $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
+        "php": "php",
+        "python": "python",
+        "perl": "perl",
+        "ruby": "ruby",
+        "go": "go run",
+        "lua": "lua",
+        "groovy": "groovy",
+        "powershell": "powershell -ExecutionPolicy ByPass -File",
+        "bat": "cmd /c",
+        "shellscript": "bash",
+        "fsharp": "fsi",
+        "csharp": "scriptcs",
+        "vbscript": "cscript //Nologo",
+        "typescript": "ts-node",
+        "coffeescript": "coffee",
+        "scala": "scala",
+        "swift": "swift",
+        "julia": "julia",
+        "crystal": "crystal",
+        "ocaml": "ocaml",
+        "r": "Rscript",
+        "applescript": "osascript",
+        "clojure": "lein exec",
+        "haxe": "haxe --cwd $dirWithoutTrailingSlash --run $fileNameWithoutExt",
+        "rust": "cd $dir && rustc $fileName && $dir$fileNameWithoutExt",
+        "racket": "racket",
+        "ahk": "autohotkey",
+        "autoit": "autoit3",
+        "dart": "dart",
+        "pascal": "cd $dir && fpc $fileName && $dir$fileNameWithoutExt",
+        "d": "cd $dir && dmd $fileName && $dir$fileNameWithoutExt",
+        "haskell": "runhaskell",
+        "nim": "nim compile --verbosity:0 --hints:off --run"
+    }
+}
