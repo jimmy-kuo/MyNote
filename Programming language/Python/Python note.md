@@ -1,55 +1,82 @@
 <!-- GFM-TOC -->
 * [Python 之禅](#Python-之禅)
 * [参数传递是值传递还是引用传递](#参数传递是值传递还是引用传递)
+* [深拷贝与浅拷贝](#深拷贝与浅拷贝)
+* [垃圾回收机制](#垃圾回收机制)
+* [del](#del)
+* [元类](#元类)
+* [type与object](#type与object)
+* [全局解释器锁](#全局解释器锁)
+* [Python的编码](#Python的编码)
+* [with(上下文管理)](#with(上下文管理))
+* [lambda(匿名函数)](#lambda(匿名函数))
+* [高阶函数](#高阶函数)
+* [yield](#yield)
+* [装饰器](#装饰器)
+* [函数参数传递](#函数参数传递)
+* [参数默认值的继承性](#参数默认值的继承性)
+* [闭包与延迟锁定](#闭包与延迟锁定)
+* [Pythonic](#Pythonic)
+* [Python的自省](#Python的自省)
+* [练习](#练习)
 <!-- GFM-TOC -->
 
 # Python 进阶 & 面试知识整理
 
 ## Python 之禅
-> The Zen of Python, by Tim Peters      
-Beautiful is better than ugly.      
-Explicit is better than implicit.       
-Simple is better than complex.      
-Complex is better than complicated.     
-Flat is better than nested.     
-Sparse is better than dense.        
-Readability counts.     
-Special cases aren't special enough to break the rules.     
-Although practicality beats purity.     
-Errors should never pass silently.      
-Unless explicitly silenced.     
-In the face of ambiguity, refuse the temptation to guess.       
-There should be one-- and preferably only one --obvious way to do it.       
-Although that way may not be obvious at first unless you're Dutch.      
-Now is better than never.       
-Although never is often better than \*right\* now.      
-If the implementation is hard to explain, it's a bad idea.      
-If the implementation is easy to explain, it may be a good idea.        
-Namespaces are one honking great idea -- let's do more of those!        
+> The Zen of Python, by Tim Peters	        
+Beautiful is better than ugly.	        
+Explicit is better than implicit.	        	        
+Simple is better than complex.	        	
+Complex is better than complicated.		        
+Flat is better than nested.		        
+Sparse is better than dense.	        	
+Readability counts.		            
+Special cases aren't special enough to break the rules.		        
+Although practicality beats purity.		        
+Errors should never pass silently.	        	
+Unless explicitly silenced.		        
+In the face of ambiguity, refuse the temptation to guess.		        
+There should be one-- and preferably only one --obvious way to do it.		        
+Although that way may not be obvious at first unless you're Dutch.		        
+Now is better than never.		        
+Although never is often better than \*right\* now.		        
+If the implementation is hard to explain, it's a bad idea.		        
+If the implementation is easy to explain, it may be a good idea.		        
+Namespaces are one honking great idea -- let's do more of those!		        
 
 > Python之禅 by Tim Peters        
-优美胜于丑陋（Python 以编写优美的代码为目标）              
-明了胜于晦涩（优美的代码应当是明了的，命名规范，风格相似）       
-简洁胜于复杂（优美的代码应当是简洁的，不要有复杂的内部实现）      
+优美胜于丑陋（Python 以编写优美的代码为目标）                  
+明了胜于晦涩（优美的代码应当是明了的，命名规范，风格相似）               
+简洁胜于复杂（优美的代码应当是简洁的，不要有复杂的内部实现）              
 复杂胜于凌乱（如果复杂不可避免，那代码间也不能有难懂的关系，要保持接口简洁）      
 扁平胜于嵌套（优美的代码应当是扁平的，不能有太多的嵌套）        
 间隔胜于紧凑（优美的代码有适当的间隔，不要奢望一行代码解决问题）        
 可读性很重要（优美的代码是可读的）       
 即便假借特例的实用性之名，也不可违背这些规则（这些规则至高无上）        
 不要包容所有错误，除非你确定需要这样做（精准地捕获异常，不写 except:pass 风格的代码）       
-当存在多种可能，不要尝试去猜测             
+当存在多种可能，不要尝试去猜测     
 而是尽量找一种，最好是唯一一种明显的解决方案（如果不确定，就用穷举法）     
 虽然这并不容易，因为你不是 Python 之父（这里的 Dutch 是指 Guido ）        
-做也许好过不做，但不假思索就动手还不如不做（动手之前要细思量）     
-如果你无法向人描述你的方案，那肯定不是一个好方案；反之亦然（方案测评标准）       
-命名空间是一种绝妙的理念，我们应当多加利用（倡导与号召）        
+做也许好过不做，但不假思索就动手还不如不做（动手之前要细思量）		        
+如果你无法向人描述你的方案，那肯定不是一个好方案；反之亦然（方案测评标准）		        
+命名空间是一种绝妙的理念，我们应当多加利用（倡导与号召）		        
 
 ##  参数传递是值传递还是引用传递
 
 ### 引用传递
 都是引用，对于不可改变的数据类型来说，不能改变，如果修改了，事实上是新建一个对象来对待。
+或者说
+Python中有可变对象（比如列表List）和不可变对象（比如字符串），在参数传递时分为两种情况：  
+1.  **对于不可变对象作为函数参数，相当于C系语言的值传递；**  
+2.  **对于可变对象作为函数参数，相当于C系语言的引用传递。**
 
-## [Python的深拷贝与浅拷贝](https://www.cnblogs.com/wilber2013/p/4645353.html)
+再或者
+**传值方式等价于python赋值号(=)**，**但不应该说是浅拷贝**。				
+以list为例，浅拷贝可变对象时(如list)，会创建一个新的list对象，并让新对象内部的每一个元素指向原对象每个元素指向的元素；而赋值号将不会创建新对象，而是直接创建一个引用连接到原对象。函数传值是后者，可以写一个函数，在函数里面打印传入参数的id()，与原值的id()是一样的，因此是直接赋值而不是浅拷贝。
+
+
+## [深拷贝与浅拷贝](https://www.cnblogs.com/wilber2013/p/4645353.html)
 
 -   Python中对象的赋值都是进行对象引用（内存地址）传递
 -   使用copy.copy()，可以进行对象的浅拷贝，**它复制了对象，但对于对象中的元素，依然使用原始的引用**.
@@ -57,7 +84,20 @@ Namespaces are one honking great idea -- let's do more of those!
 -   **对于非容器类型（如数字、字符串、和其他'原子'类型的对象）没有被拷贝一说**
 -   如果元祖变量只包含原子类型对象，则不能深拷贝
 
-## [Python 的垃圾回收机制](https://www.cnblogs.com/pinganzi/p/6646742.html#_label0)
+#### 引用
+![image.png](https://upload-images.jianshu.io/upload_images/5617720-bc145344a2dec8bb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+
+#### 浅拷贝
+![image.png](https://upload-images.jianshu.io/upload_images/5617720-0027f1f193de74a2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+
+#### 深拷贝
+![image.png](https://upload-images.jianshu.io/upload_images/5617720-8ea0076918780706.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+
+
+## [垃圾回收机制](https://www.cnblogs.com/pinganzi/p/6646742.html#_label0)
 
 ### 引用计数
 python里每一个东西都是对象，它们的核心就是一个结构体：`PyObject`
@@ -230,7 +270,7 @@ NameError: name 'x' is not defined
 可以看到x和y指向同一个列表，但是删除x后，y并没有受到影响。del的是引用，而不是对象
 
 
-## [Python 的元类 (metaclass)](http://blog.jobbole.com/21351/)
+## [元类 (metaclass)](http://blog.jobbole.com/21351/)
 
 ### 类也是对象
 在理解元类之前，你需要先掌握Python中的类。Python中类的概念借鉴于[Smalltalk](https://en.wikipedia.org/wiki/Smalltalk)，这显得有些奇特。在大多数编程语言中，类就是一组用来描述如何生成一个对象的代码段。在Python中这一点仍然成立：
@@ -577,7 +617,7 @@ class UpperAttrMetaclass(type):
 1.  意图会更加清晰。当你读到UpperAttrMetaclass(type)时，你知道接下来要发生什么。
 2.  你可以使用OOP编程。元类可以从元类中继承而来，改写父类的方法。元类甚至还可以使用元类。
 3.  你可以把代码组织的更好。当你使用元类的时候肯定不会是像我上面举的这种简单场景，通常都是针对比较复杂的问题。将多个方法归总到一个类中会很有帮助，也会使得代码更容易阅读。
-4. 你可以使用__new__, __init__以及__call__这样的特殊方法。它们能帮你处理不同的任务。就算通常你可以把所有的东西都在__new__里处理掉，有些人还是觉得用__init__更舒服些。
+4. 你可以使用\_\_new\_\_, \_\_init\_\_以及\_\_call\_\_这样的特殊方法。它们能帮你处理不同的任务。就算通常你可以把所有的东西都在\_\_new\_\_里处理掉，有些人还是觉得用\_\_init\_\_更舒服些。
 5. 哇哦，这东西的名字是metaclass，肯定非善类，我要小心！
 
 **究竟为什么要使用元类？**
@@ -632,51 +672,765 @@ Foo().bar()
 2. 类装饰器（class decorators）
 
 
-## Python 的新类和旧类
+## 新式类和旧式类
+
+在Python 2及以前的版本中，**由任意内置类型派生出的类**（只要一个内置类型位于类树的某个位置），都属于“**新式类**”，都会获得所有“新式类”的特性；反之，即**不由任意内置类型派生出的类**，则称之为“**经典类**”。
+
+```python
+class A:
+    pass
+
+class B(object):
+    pass
+```
+
+**Python 2.x中默认都是经典类，只有显式继承了object才是新式类**
+**Python 3.x中默认都是新式类，不必显式的继承object**
+
+> “新式类”和“经典类”的区分在Python 3之后就已经不存在，在Python 3.x之后的版本，因为所有的类都派生自内置类型object(即使没有显示的继承object类型)，即所有的类都是“新式类”。
+
+### 继承顺序的区别
+以钻石继承为例,经典类的钻石继承是深度优先，即从下往上搜索；新式类的继承顺序是采用C3算法（非广度优先）。
+```python
+class ClassicClassA():
+    var = 'Classic Class A'
 
 
+class ClassicClassB(ClassicClassA):
+    pass
 
 
+class ClassicClassC():
+    var = 'Classic Class C'
 
 
+class SubClassicClass(ClassicClassB, ClassicClassC):
+    pass
 
 
+if __name__ == '__main__':
+    print(SubClassicClass.var)
+
+>>> Classic Class A
+```
+
+在SubClassicClass对var属性进行搜索的过程中，根据从下到上的原则，**会优先搜索ClassicClassB，而ClassicClassB没有var属性，会继续往上搜索ClassicClassB的超类ClassicClassA**（深度优先），在ClassicClassA中发现var属性后停止搜索，var的值为ClassicClassA中var的值；而ClassicClassC的var属性从始至终都未被搜索到。
+
+从运行结果可以看出，输出的是Classic Class A，可见类继承的搜索是深度优先，由下至上进行搜索。
 
 
+新式类的继承顺序并非是广度优先，而是[C3算法](http://blog.csdn.net/fmblzf/article/details/52512145)，**只是在部分情况下，C3算法的结果恰巧与广度优先的结果相同**。
+
+对新式类的继承搜索顺序进行代码验证，新式类中，可以使用mro函数来查看类的搜索顺序(这也算是一个区别)，如SubNewStyleClass.mro()。
 
 
+#### 统一了python中的类型机制，保持class与type的统一
+
+对新式类的实例执行a.\_\_class\_\_与type(a)的结果是一致的，对于旧式类来说就不一样了。
+经典类的实例是instance类型，而内置类的实例却不是，无法统一
+```python
+class A():pass
+class B():pass
+
+a = A()
+b = B()
+
+if __name__ == '__main__':
+    print(type(a))
+    print(type(b))
+    print(type(a) == type(b))
+    print(a.__class__)
+    print(b.__class__)
+    print(a.__class__ == b.__class__)
+```
 
 
+Python 2.6.9 及 2.7.10 的运行结果：
 
-## Python 的 全局解释器锁 GIL（Global Interpreter Lock）
+![](https://images2015.cnblogs.com/blog/969255/201606/969255-20160617142652901-1787548496.png)
 
-## Python 的编码
+在Python 2.x及以前的版本，**所有经典类的实例都是“instance”（实例类型）**。所以比较经典类实例的类型(type)毫无意义，因为所有的经典类实例都是instance类型，比较的结果通常为True。更多情况下需要比较经典类实例的\_\_class\_\_属性来获得我们想要的结果（或使用isinstance函数）。
 
-## Pythonic
+Python 3.5.1 运行结果
 
-翻转
+![](https://images2015.cnblogs.com/blog/969255/201606/969255-20160617143312557-1799665673.png)
+
+在Python 3.x及之后的版本，**类和类型已经合并。类实例的类型是这个实例所创建自的类**（通常是和类实例的\_\_class\_\_相同），而不再是Python 2.x版本中的“instance”实例类型。
+
+需要注意的是，在Python 2.x版本中，“经典类的实例都是instance类型”，这个结论只适用于经典类。对新式类和内置类型的实例，它们的类型要更加明确。
+
+所有的类型都是type类。从另一个角度理解，类就是type类的实例，所有的新式类，都是由type类实例化创建而来，并且显式或隐式继承自object。
+
+在Python 3.x 中，**所有的类都显式或隐式的派生自object类**，type类也不例外。**类型自身派生自object类，而object类派生自type**，二者组成了一个循环的关系。
 
 
+## [type与object](https://www.zhihu.com/question/38791962/answer/78172929)
 
 
-## 上下文管理 with
+#### 引言
 
-## 匿名函数 lambda
+父子关系，即继承关系，表现为子类继承于父类，如『蛇』类继承自『爬行动物』类，我们说『蛇是一种爬行动物』，英文说『snake is a kind of reptile』。在python里要查看一个类型的父类，使用它的\_\_bases\_\_属性可以查看。
+
+类型实例关系，表现为某个类型的实例化，例如『萌萌是一条蛇』，英文说『萌萌 is an instance of snake』。在python里要查看一个实例的类型，使用它的\_\_class\_\_属性可以查看，或者使用type()函数查看。
+
+这两种关系使用下面这张图简单示意，继承关系使用实线从子到父连接，类型实例关系使用虚线从实例到类型连接：
+![image.png](https://upload-images.jianshu.io/upload_images/5617720-c3f74eaec7333f0d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+
+我们将使用一块白板来描述一下Python里面对象的关系，白板划分成三列：  
+
+![](https://pic3.zhimg.com/80/702d34bae50d2e4f42e0ae4f45e2e996_hd.jpg)
+
+先来看看type和object
+```python
+>>> object
+<type 'object'>
+>>> type
+<type 'type'>
+```
+
+它们都是type的一个实例，表示它们都是类型对象。
+
+在Python的世界中，**object是父子关系的顶端，所有的数据类型的父类都是它**；
+**type是类型实例关系的顶端，所有对象都是它的实例的**。它们两个的关系可以这样描述：  
+
+- object是一个type，object is and instance of type。即Object是type的一个实例。
+```python
+>>> object.__class__<type 'type'>
+>>> object.__bases__  # object 无父类，因为它是链条顶端。
+()
+```
+
+- type是一种object， type is kind of object。即Type是object的子类。
+```python
+>>> type.__bases__(<type 'object'>,)
+>>> type.__class__  # type的类型是自己<type 'type'>
+```
+![image.png](https://upload-images.jianshu.io/upload_images/5617720-5b6b4c76641c2ee2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+我们再引入list, dict, tuple 这些内置数据类型来看看
+```python
+>>> list.__bases__(<type 'object'>,)
+>>> list.__class__<type 'type'>
+>>> dict.__bases__(<type 'object'>,)
+>>> dict.__class__<type 'type'>
+>>> tuple.__class__<type 'type'>
+>>> tuple.__bases__(<type 'object'>,) 
+```
+它们的父类都是object，类型都是type。
+
+再实例化一个list看看
+```python
+>>> mylist = [1,2,3]
+>>> mylist.__class__<type 'list'>
+>>> mylist.__bases__
+Traceback (most recent call last):  
+File "<stdin>", line 1, in <module>
+AttributeError: 'list' object has no attribute '__bases__'
+```
+
+实例化的list的类型是<type 'list'>, 而没有了父类。把它们加到白板上去：
+![image.png](https://upload-images.jianshu.io/upload_images/5617720-674c84ce92aee72c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+白板上的虚线表示源是目标的实例，实线表示源是目标的子类。即，左边的是右边的类型，而上面的是下面的父亲。  
+虚线是跨列产生关系，而实线只能在一列内产生关系。除了type和object两者外。
+
+当我们自己去定个一个类及实例化它的时候，和上面的对象们又是什么关系呢？试一下
+```python
+>>> class C(object):
+... 	pass
+... 
+>>> C.__class__<type 'type'>
+>>> C.__bases__(<type 'object'>,)
+
+# 实例化
+>>> c = C()
+>>> c.__class__<class '__main__.C'>
+>>> c.__bases__
+Traceback (most recent call last):  
+File "<stdin>", line 1, in <module>
+AttributeError: 'C' object has no attribute '__bases__'
+```
+这个实例化的C类对象也是没有父类的属性的。  
+再更新一下白板：
+
+![image.png](https://upload-images.jianshu.io/upload_images/5617720-531c0283fcb9046d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+第一列，元类列，type是所有元类的父亲。我们可以通过继承type来创建元类。  
+第二列，TypeObject列，也称类列，object是所有类的父亲，大部份我们直接使用的数据类型都存在这个列的。  
+第三列，实例列，实例是对象关系链的末端，不能再被子类化和实例化。
+
+object是父子关系的顶端，所有的数据类型的父类都是它；
+type是类型实例关系的顶端，所有对象都是它的实例的
+**即object是type的一个实例**。
+**type是object的子类**。
+  
+  
+
+## [全局解释器锁](http://cenalulu.github.io/python/gil-in-python/)
+
+全局解释器锁 GIL（Global Interpreter Lock）
+#### 简介
+1. 设置GIL
+2. 切换到一个线程去运行
+3. 运行：
+	a. 指定数量的字节码指令，或者
+	b. 线程主动让出控制（I/O或者可以调用time.sleep(0)）
+4. 把线程设置为睡眠状态
+5. 解锁GIL
+6. 再次重复以上所有步骤
+
+### 引言
+
+#### GIL是什么
+
+首先需要明确的一点是`GIL`并不是Python的特性，它是在实现Python解析器(CPython)时所引入的一个概念。就好比C++是一套语言（语法）标准，但是可以用不同的编译器来编译成可执行代码。有名的编译器例如GCC，INTEL C++，Visual C++等。Python也一样，同样一段代码可以通过CPython，PyPy，Psyco等不同的Python执行环境来执行。像其中的JPython就没有GIL。然而因为CPython是大部分环境下默认的Python执行环境。所以在很多人的概念里CPython就是Python，也就想当然的把`GIL`归结为Python语言的缺陷。所以这里要先明确一点：GIL并不是Python的特性，Python完全可以不依赖于GIL
+
+那么CPython实现中的GIL又是什么呢？GIL全称`Global Interpreter Lock`为了避免误导，我们还是来看一下官方给出的解释：
+
+> In CPython, the global interpreter lock, or GIL, is a mutex that prevents multiple native threads from executing Python bytecodes at once. This lock is necessary mainly because CPython’s memory management is not thread-safe. (However, since the GIL exists, other features have grown to depend on the guarantees that it enforces.)
+
+好吧，是不是看上去很糟糕？一个防止多线程并发执行机器码的一个Mutex，乍一看就是个BUG般存在的全局锁嘛！别急，我们下面慢慢的分析
+
+#### 为什么会有GIL
+
+由于物理上得限制，各CPU厂商在核心频率上的比赛已经被多核所取代。为了更有效的利用多核处理器的性能，就出现了多线程的编程方式，而随之带来的就是线程间数据一致性和状态同步的困难。[即使在CPU内部的Cache也不例外](http://cenalulu.github.io/python/gil-in-python/linux/all-about-cpu-cache/)，为了有效解决多份缓存之间的数据同步时各厂商花费了不少心思，也不可避免的带来了一定的性能损失。
+
+Python当然也逃不开，为了利用多核，Python开始支持多线程。_而解决多线程之间数据完整性和状态同步的最简单方法自然就是加锁。_  于是有了GIL这把超级大锁，而当越来越多的代码库开发者接受了这种设定后，他们开始大量依赖这种特性（即默认python内部对象是thread-safe的，无需在实现时考虑额外的内存锁和同步操作）。
+
+慢慢的这种实现方式被发现是蛋疼且低效的。但当大家试图去拆分和去除GIL的时候，发现大量库代码开发者已经重度依赖GIL而非常难以去除了。有多难？做个类比，像MySQL这样的“小项目”为了把Buffer Pool Mutex这把大锁拆分成各个小锁也花了从5.5到5.6再到5.7多个大版为期近5年的时间，并且仍在继续。MySQL这个背后有公司支持且有固定开发团队的产品走的如此艰难，那又更何况Python这样核心开发和代码贡献者高度社区化的团队呢？
+
+所以简单的说GIL的存在更多的是历史原因。如果推到重来，多线程的问题依然还是要面对，但是至少会比目前GIL这种方式会更优雅。
+
+#### GIL的影响
+
+从上文的介绍和官方的定义来看，GIL无疑就是一把全局排他锁。毫无疑问全局锁的存在会对多线程的效率有不小影响。甚至就几乎等于Python是个单线程的程序。 那么读者就会说了，全局锁只要释放的勤快效率也不会差啊。只要在进行耗时的IO操作的时候，能释放GIL，这样也还是可以提升运行效率的嘛。或者说再差也不会比单线程的效率差吧。理论上是这样，而实际上呢？Python比你想的更糟。
+
+下面我们就对比下Python在多线程和单线程下得效率对比。测试方法很简单，一个循环1亿次的计数器函数。一个通过单线程执行两次，一个多线程执行。最后比较执行总时间。测试环境为双核的Mac pro。注：为了减少线程库本身性能损耗对测试结果带来的影响，这里单线程的代码同样使用了线程。只是顺序的执行两次，模拟单线程。
+
+##### 顺序执行的单线程(single_thread.py)
+
+```python
+#! /usr/bin/python
+
+from threading import Thread
+import time
+
+def my_counter():
+    i = 0
+    for _ in range(100000000):
+        i = i + 1
+    return True
+
+def main():
+    thread_array = {}
+    start_time = time.time()
+    for tid in range(2):
+        t = Thread(target=my_counter)
+        t.start()
+        t.join()
+    end_time = time.time()
+    print("Total time: {}".format(end_time - start_time))
+
+if __name__ == '__main__':
+    main()
+```
+
+##### 同时执行的两个并发线程(multi_thread.py)
+
+```python
+#! /usr/bin/python
+
+from threading import Thread
+import time
+
+def my_counter():
+    i = 0
+    for _ in range(100000000):
+        i = i + 1
+    return True
+
+def main():
+    thread_array = {}
+    start_time = time.time()
+    for tid in range(2):
+        t = Thread(target=my_counter)
+        t.start()
+        thread_array[tid] = t
+    for i in range(2):
+        thread_array[i].join()
+    end_time = time.time()
+    print("Total time: {}".format(end_time - start_time))
+
+if __name__ == '__main__':
+    main()
+```
+
+下图就是测试结果
+
+![测试结果一](http://cenalulu.github.io/images/python/gil/test_result.jpg)
+
+可以看到python在多线程的情况下居然比单线程整整慢了45%。按照之前的分析，即使是有GIL全局锁的存在，串行化的多线程也应该和单线程有一样的效率才对。那么怎么会有这么糟糕的结果呢？
+
+让我们通过GIL的实现原理来分析这其中的原因。
+
+### 当前GIL设计的缺陷
+
+#### 基于pcode数量的调度方式
+
+按照Python社区的想法，操作系统本身的线程调度已经非常成熟稳定了，没有必要自己搞一套。**所以Python的线程就是C语言的一个pthread，并通过操作系统调度算法进行调度**（例如linux是CFS）。为了让各个线程能够平均利用CPU时间，python会计算当前已执行的微代码数量，达到一定阈值后就强制释放GIL。而这时也会触发一次操作系统的线程调度（当然是否真正进行上下文切换由操作系统自主决定）。
+
+伪代码
+
+```c
+while True:
+    acquire GIL
+    for i in 1000:
+        do something
+    release GIL
+    /* Give Operating System a chance to do thread scheduling */
+```
+
+这种模式在只有一个CPU核心的情况下毫无问题。任何一个线程被唤起时都能成功获得到GIL（因为只有释放了GIL才会引发线程调度）。但当CPU有多个核心的时候，问题就来了。从伪代码可以看到，从`release GIL`到`acquire GIL`之间几乎是没有间隙的。所以当其他在其他核心上的线程被唤醒时，大部分情况下主线程已经又再一次获取到GIL了。这个时候被唤醒执行的线程只能白白的浪费CPU时间，看着另一个线程拿着GIL欢快的执行着。然后达到切换时间后进入待调度状态，再被唤醒，再等待，以此往复恶性循环。
+
+PS：当然这种实现方式是原始而丑陋的，Python的每个版本中也在逐渐改进GIL和线程调度之间的互动关系。例如先尝试持有GIL在做线程上下文切换，在IO等待时释放GIL等尝试。但是无法改变的是GIL的存在使得操作系统线程调度的这个本来就昂贵的操作变得更奢侈了。  [关于GIL影响的扩展阅读](http://www.dabeaz.com/GIL/)
+
+为了直观的理解GIL对于多线程带来的性能影响，这里直接借用的一张测试结果图（见下图）。图中表示的是两个线程在双核CPU上得执行情况。两个线程均为CPU密集型运算线程。绿色部分表示该线程在运行，且在执行有用的计算，红色部分为线程被调度唤醒，但是无法获取GIL导致无法进行有效运算等待的时间。  ![GIL Performance](http://www.dabeaz.com/images/GIL_2cpu.png)由图可见，GIL的存在导致多线程无法很好的立即多核CPU的并发处理能力。
+
+那么Python的IO密集型线程能否从多线程中受益呢？我们来看下面这张测试结果。颜色代表的含义和上图一致。白色部分表示IO线程处于等待。可见，当IO线程收到数据包引起终端切换后，仍然由于一个CPU密集型线程的存在，导致无法获取GIL锁，从而进行无尽的循环等待。  ![GIL IO Performance](http://www.dabeaz.com/images/GIL_ioclose.png)
+
+简单的总结下就是：**Python的多线程在多核CPU上，只对于IO密集型计算产生正面效果；而当有至少有一个CPU密集型线程存在，那么多线程效率会由于GIL而大幅下降。**
+
+
+### 如何避免受到GIL的影响
+
+说了那么多，如果不说解决方案就仅仅是个科普帖，然并卵。GIL这么烂，有没有办法绕过呢？我们来看看有哪些现成的方案。
+
+#### 用multiprocessing替代Thread
+
+multiprocessing库的出现很大程度上是为了弥补thread库因为GIL而低效的缺陷。它完整的复制了一套thread所提供的接口方便迁移。唯一的不同就是它使用了多进程而不是多线程。每个进程有自己的独立的GIL，因此也不会出现进程之间的GIL争抢。
+
+**当然multiprocessing也不是万能良药。它的引入会增加程序实现时线程间数据通讯和同步的困难。就拿计数器来举例子，如果我们要多个线程累加同一个变量，对于thread来说，申明一个global变量，用thread.Lock的context包裹住三行就搞定了。而multiprocessing由于进程之间无法看到对方的数据，只能通过在主线程申明一个Queue，put再get或者用share memory的方法。** 这个额外的实现成本使得本来就非常痛苦的多线程程序编码，变得更加痛苦了。具体难点在哪有兴趣的读者可以扩展阅读[这篇文章](http://www.jeffknupp.com/blog/2013/06/30/pythons-hardest-problem-revisited/)
+
+#### 用其他解析器
+
+之前也提到了既然GIL只是CPython的产物，那么其他解析器是不是更好呢？没错，像JPython和IronPython这样的解析器由于实现语言的特性，他们不需要GIL的帮助。然而由于用了Java/C#用于解析器实现，他们也失去了利用社区众多C语言模块有用特性的机会。所以这些解析器也因此一直都比较小众。毕竟功能和性能大家在初期都会选择前者，`Done is better than perfect`。
+
+#### 所以没救了么？
+
+当然Python社区也在非常努力的不断改进GIL，甚至是尝试去除GIL。并在各个小版本中有了不少的进步。有兴趣的读者可以扩展阅读[这个Slide](http://www.dabeaz.com/python/UnderstandingGIL.pdf)  另一个改进[Reworking the GIL](https://mail.python.org/pipermail/python-dev/2009-October/093321.html)
+
+-   将切换颗粒度从基于opcode计数改成基于时间片计数
+-   避免最近一次释放GIL锁的线程再次被立即调度
+-   新增线程优先级功能（高优先级线程可以迫使其他线程释放所持有的GIL锁）
+
+## Python的编码
+
+在Python2.x中，有两种字符串类型：str和unicode类型。str存bytes数据，unicode类型存unicode数据
+在Python3.x中，也只有两种字符串类型：str和bytes类型。str类型存unicode数据，bytse类型存bytes数据，
+
+#### python2的encode和decode
+
+**我们把从Unicode到字节码(byte string)称之为encode**
+encode : Unicode -> byte string
+
+**把从字节码(byte string)到Unicode码称之为decode**
+decode: byte string-> Unicode
+
+unicode是离用户更近的数据，bytes是离计算机更近的数据。
+
+##  [with(上下文管理)](https://www.ibm.com/developerworks/cn/opensource/os-cn-pythonwith/)
+
+### 上下文
+处理程序代码的前后语境
+简而言之，有一个特殊的语句块，在执行这个语句块之前需要先执行一些准备动作；当语句块执行完成后，需要继续执行一些收尾动作。
+
+### 用法
+上下文管理常用于读写文件及短暂的操作数据库中
+```python
+with open(r'somefileName') as somefile:
+    for line in somefile:
+        print line
+        # ...more code
+```
+这里使用了 with 语句，不管在处理文件过程中是否发生异常，都能保证 with 语句执行完毕后已经关闭了打开的文件句柄。如果使用传统的 try/finally 范式
+
+### 实现
+通过实现两个魔法方法 `__enter__`和`__exit__` 来实现，just show the code
+```python
+class Contextor:
+    def __enter__(self):
+        pass
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+		"""
+		exc_type	: 错误类型
+		exc_val		: 错误值
+		exc_tb		: Traceback
+		"""
+        pass
+
+contextor = Contextor()
+
+with contextor [as var]:
+    with_body
+```
+
+##  lambda(匿名函数)
 
 ```python
 lambda x,y : x + y
+
+# lambda 表达式当然也是对象
+t = lambda x,y : x + y
+print t	# <function <lambda> at 0x7f7c3d02a668>
+
+t(1,2) 	# 3
 ```
 常用与被Python 其他高级函数调用，`map()`，`filter()` etc...
+
+
 ## 高阶函数
 
-## yield
+### map()函数
 
-## 装饰器
-### class decorators
-### 8个面试题https://zhuanlan.zhihu.com/p/30643045
+python内置的一个高阶函数，**它接收一个函数f和一个list,并且把list的元素以此传递给函数f，然后返回一个函数f处理完所有list元素的列表**，如下：
 
-### [单例模式的几种实现](https://github.com/PythonScientists/InterviewKeyOfPython/blob/master/Interview_Experience/Python%E9%9D%A2%E8%AF%95%E9%A2%98%E2%80%94%E2%80%94%E9%83%A8%E5%88%86%E4%B8%80#L845)
+```python
+map(lambda x:x**2,[1,2,3,4,5])
+
+# [1, 4, 9, 16, 25]
+```
+
+
+### reduce()函数
+reduce()函数也是python的内置高阶函数，reduce()函数接收的的参数和map()类似，一个函数f，一个list，但行为和map()不同，**reduce()传入的参数f必须接受2个参数**，reduce() 函数还接收第三个参数，作为返回结果的初始值，
+
+**第一次调用是把list的前两个元素传递给f,第二次调用时，就是把前两个list元素的计算结果当成第一个参数**，list的第三个元素当成第二个参数，传入f进行操作，以此类推，并最终返回结果；
+
+```python
+reduce(lambda x,y:x+y,[1,2,3,4,5],10)
+
+# 25 
+```
+
+### filter()函数
+filter()函数接收一个函数f和一个list,这个函数f的作用是对每个元素进行判断，返回true或false,filter()根据判断结果自动过滤掉不符合条件的元素，返回由符合条件的元素组成的list;例
+```python
+filter(lambda x:x%2==1,[1,2,3,4,5])	# 留下列表里的所有奇数
+
+# [1, 3, 5]
+```
+
+### zip()函数
+**zip()**  函数用于将可迭代的对象作为参数，将对象中对应的元素打包成一个个元组，然后返回由这些元组组成的列表。
+如果各个迭代器的元素个数不一致，则返回列表长度与最短的对象相同
+```python
+# 遍历两个list
+for i,j in zip([1,2,3],['x','y','z']):
+    print i,j
+
+# 1 x
+# 2 y
+# 3 z
+
+# 将两个list合成一个dict
+t = dict(zip([1,2,3],['x','y','z']))
+{1: 'x', 2: 'y', 3: 'z'}
+```
+
+### sort()函数
+排序函数，
+基本形式 `sorted(iterable[, cmp[, key[, reverse]]])`
+
+```python
+sorted([1,2,-3,-4,5])	# 默认升序
+# [-4, -3, 1, 2, 5]
+
+sorted([1,2,-3,-4,5],key=abs)	# 返回一个以数值的绝对值为排序关键词的升序列表
+# [1, 2, -3, -4, 5]
+
+sorted([1,2,-3,-4,5],reverse=True)	# 降序
+# [5, 2, 1, -3, -4]
+
+# 对字符串和其他复杂数据结构的排序
+sorted(['bob', 'about', 'Zoo', 'Credit']	# 对字符串以asc ii 码为关键词排序
+# ['Credit', 'Zoo', 'about', 'bob']
+
+sorted(['bob', 'about', 'Zoo', 'Credit',key = str.lower]	# 忽略大小写以字母顺序为关键词排序
+# 'about', 'bob', 'Credit', 'Zoo'
+
+L = [('Bob', 75), ('Adam', 92), ('Bart', 66), ('Lisa', 88)]	# 以每个排序对象的第二个元素为关键词，降序排列
+sorted(L,key = lambda x:x[1],reverse=True)
+# [('Adam', 92), ('Lisa', 88), ('Bob', 75), ('Bart', 66)]
+```
+
+
+## [yield](https://www.liaoxuefeng.com/article/001373892916170b88313a39f294309970ad53fc6851243000)
+带有 yield 的函数在 Python 中被称之为 generator(生成器),是一个可以迭代的对象。
+```python
+# 这是一个产生斐波那契数列的迭代器
+def fab(max): 
+    n, a, b = 0, 0, 1 
+    while n < max: 
+        yield b 
+        # print b 
+        a, b = b, a + b 
+        n = n + 1 
+
+>>> for n in fab(5): 
+...     print n 
+... 
+1 
+1 
+2 
+3 
+5
+```
+简单地讲，yield 的作用就是把一个函数变成一个 generator，带有 yield 的函数不再是一个普通函数，Python 解释器会将其视为一个 generator，调用 fab(5) 不会执行 fab 函数，而是返回一个 iterable 对象！在 for 循环执行时，每次循环都会执行 fab 函数内部的代码，执行到 yield b 时，fab 函数就返回一个迭代值，**下次迭代时，代码从 yield b 的下一条语句继续执行，而函数的本地变量看起来和上次中断执行前是完全一样的，于是函数继续执行，直到再次遇到 yield**。
+
+这里的概念就是协程。[有关协程](https://www.liaoxuefeng.com/article/001373892916170b88313a39f294309970ad53fc6851243000)
+python中 greenlet 和  gevent 也可以很好的协程,这里就不展开了
+
+也可以手动调用 fab(5) 的 next() 方法（因为 fab(5) 是一个 generator 对象，该对象具有 next() 方法），这样我们就可以更清楚地看到 fab 的执行流程
+
+## [装饰器](https://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000/001386819879946007bbf6ad052463ab18034f0254bf355000)
+由于函数也是一个对象，而且函数对象可以被赋值给变量，所以，通过变量也能调用该函数。
+于是，你就可以在编写一个控制程序，接收某个特定函数作为参数输入，并在这个特定函数运行的前后在做一些你想做的事情，这就是装饰器。
+```python
+def log(func):
+    def wrapper(*args, **kw):
+        print 'call %s():' % func.__name__
+        result = func(*args, **kw)
+        print 'done'
+        return result
+    return wrapper
+
+@log
+def hello():
+    print 'hello, world'
+    
+hello()
+
+# call hello():
+# hello, world
+# done
+```
+以上的代码非常清楚的展示了装饰器的作用，值得一提的是 `*args, **kw` 这是python的可变参数的接收方式，
+这里一定要将接收到的参数传递给装饰器所装饰的函数，即`func(*args, **kw)`
+
+
+### 类装饰器
+还记得元类吗？
+> 元类的主要目的就是为了当创建类时能够自动地改变类
+
+当然，不光是元类能完成这个功能，类装饰器也可以。
+装饰器不光能接收函数作为输入，类也是一样
+以下是用类实现一个单例模式的方法
+```python
+    def singleton(cls, *args, **kw):  
+        instances = {}  
+        def _singleton():  
+            if cls not in instances:  
+                instances[cls] = cls(*args, **kw)	# 以类名作为实例化的标准,每个类名只能被实例化一次  
+            return instances[cls]  
+        return _singleton  
+     
+    @singleton  
+    class MyClass(object):  
+        def __init__(self, x=0):  
+            self.x = x  
+```
+
+### 装饰器与AOP（面向切面编程）
+
+装饰器是一个很著名的设计模式，经常被用于有切面需求的场景，较为经典的有插入日志、性能测试、事务处理等。装饰器是解决这类问题的绝佳设计，有了装饰器，我们就可以抽离出大量函数中与函数功能本身无关的雷同代码并继续重用。概括的讲，**装饰器的作用就是为已经存在的对象添加额外的功能**
+
+AOP就是写代码的时候 把各个模块中需要重复写的抽取出来，弄成一个切面。例如日志，权限。
+切面的具体表现就是实现公共方法的类
+
+![](http://images.51cto.com/files/uploadimg/20100412/140615289.jpg)
+## 函数参数传递
+
+1. 位置传递实例：
+```python
+def fun(a,b,c)
+　　return a+b+c
+　　
+print(f(1,2,3))
+```
+ 
+ 2. 关键字传递
+关键字(keyword)传递是根据每个参数的名字传递参数。关键字并不用遵守位置的对应关系。
+```python
+def fun(a,b,c)
+　　return a+b+c
+
+print(f(1,c=3,b=2))
+```
+
+3. 参数默认值
+在定义函数的时候，使用形如c=10的方式，可以给参数赋予默认值(default)。如果该参数最终没有被传递值，将使用该默认值。
+```python
+def f(a,b,c=10):
+　　return a+b+c
+ 
+print(f(3,2))
+print(f(3,2,1))
+```
+
+在第一次调用函数f时， 我们并没有足够的值，c没有被赋值，c将使用默认值10.第二次调用函数的时候，c被赋值为1，不再使用默认值。
+
+4. 包裹传递
+在定义函数时，我们有时候并不知道调用的时候会传递多少个参数。这时候，包裹(packing)位置参数，或者包裹关键字参数，来进行参数传递，会非常有用。
+下面是包裹位置传递的例子：
+
+```python
+def func(*name):
+　　print type(name)
+　　print name
+ 
+
+func(1,4,6)
+# <type 'tuple'> 
+# (1, 4, 6) 
+
+func(5,6,7,1,2,3)
+# <type 'tuple'>
+# (5, 6, 7, 1, 2, 3)
+```
+
+两次调用，尽管参数个数不同，都基于同一个func定义。在func的参数表中，所有的参数被name收集，根据位置合并成一个元组(tuple)，这就是包裹位置传递。
+
+ **为了提醒Python参数，name是包裹位置传递所用的元组名**，在定义func时，在name前加*号。
+
+下面是包裹关键字传递的第二个例子：
+```python
+def func(**dict):
+　　print type(dict)
+　　print dict
+ 
+func((1,9))
+func("a":2,"b":1,"c":11)
+```
+与上面一个例子类似，dict是一个字典，收集所有的关键字，传递给函数func。为了提醒Python，参数dict是包裹关键字传递所用的字典，在dict前加\*\*。
+
+ 包裹传递的关键在于定义函数时，在相应元组或字典前加\*或\*\*。
+
+5. 解包裹
+
+\*和\*\*，也可以在调用的时候使用，即解包裹(unpacking), 下面为例：
+```python
+def func(a,b,c):
+　　print a,b,c
+ 
+
+args = (1,3,4)
+func(*args)
+
+dict = {'a':1,'b':2,'c':3}
+func(**dict)
+```
+在这个例子中，所谓的解包裹，就是在传递tuple时，让tuple的每一个元素对应一个位置参数。在调用func时使用\*，是为了提醒Python：我想要把args拆成分散的三个元素，分别传递给a,b,c。（设想一下在调用func时，args前面没有\*会是什么后果？） 
+
+相应的，也存在对词典的解包裹，使用相同的func定义，然后：在传递词典dict时，让词典的每个键值对作为一个关键字传递给func。
+
+## 参数默认值的继承性
+```python
+def extendList(val, list=[]):
+    list.append(val)
+    return list
+
+list1 = extendList(10)
+list2 = extendList(123,[])
+list3 = extendList('a')
+
+print "list1 = %s" % list1
+print "list2 = %s" % list2
+print "list3 = %s" % list3
+```
+
+结果为：
+```python
+list1 = [10, 'a']
+list2 = [123]
+list3 = [10, 'a']
+```
+
+很多人都会误认为list1=[10],list3=[‘a’],因为他们以为每次extendList被调用时，列表参数的默认值都将被设置为[].但实际上的情况是，**新的默认列表只在函数被定义的那一刻创建一次**。
+
+当extendList被没有指定特定参数list调用时，这组list的值随后将被使用。这是因为带有默认参数的表达式在函数被定义的时候被计算，不是在调用的时候被计算。因此list1和list3是在同一个默认列表上进行操作（计算）的。而list2是在一个分离的列表上进行操作（计算）的。（通过传递一个自有的空列表作为列表参数的数值）
+
+## [闭包与延迟锁定](https://www.zhihu.com/question/56193983)
+
+![image.png](https://upload-images.jianshu.io/upload_images/5617720-874b568e2df7d739.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](https://upload-images.jianshu.io/upload_images/5617720-080dbb457d7cf00f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+## Pythonic
+
+### 交换变量
+```python
+a,b = b,a
+```
+
+### 翻转
+```python
+a = 'hello, world!'
+a[::-1] # !dlrow ,olleh
+```
+
+### 拼接字符串
+```python
+a = ['hello', 'world']
+" ".join(a) 	# hello world
+```
+
+### 列表去重
+```python
+a = [1, 1, 1, 2, 3 ,4 ,4, 5]
+a = list(set(a)) 		# [1, 2, 3, 4, 5]
+```
+
+### 复制列表
+```python
+import copy
+a = [1,'a',['x']]
+
+# 浅复制
+b = copy.copy(a)
+b = a[:]
+b = list(a)	# 使用工厂函数
+
+# 深复制
+b = copy.deepcopy(a)
+```
 
 ### 列表推导
+```python
+ood_list = [i for i in xrange(1,101) if i % 2 == 1]
+```
+当你把推导式的 [] 替换为 () 时，就变为了一个生成器，即一个可迭代的对象。而且这样做可以解决列表推导与lambda结合时产生的延迟锁定问题。
 
-### 字典推导？
+
+### 字典推导式
+```python
+# 快速更换k,v
+mcase = {'a': 10, 'b': 34}
+mcase_frequency = {v: k for k, v in mcase.items()}
+```
+
+### 读写文件
+```python
+with open('/path/to/file', 'r') as f: 
+	do something...
+```
+
+## Python的自省(http://blog.csdn.net/longerzone/article/details/17913117)
+
+自省就是面向对象的语言所写的程序在运行时,所能知道对象的类型.简单一句就是**运行时能够获得对象的类型**.比如type(),dir(),getattr(),hasattr(),isinstance().
+
+## 练习
+
+#### [8个面试题](https://zhuanlan.zhihu.com/p/30643045)
+#### [单例模式的几种实现](https://github.com/PythonScientists/InterviewKeyOfPython/blob/master/Interview_Experience/Python%E9%9D%A2%E8%AF%95%E9%A2%98%E2%80%94%E2%80%94%E9%83%A8%E5%88%86%E4%B8%80#L845)
+#### **[InterviewKeyOfPython](https://github.com/PythonScientists/InterviewKeyOfPython)**
