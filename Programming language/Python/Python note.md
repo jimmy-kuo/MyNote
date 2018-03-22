@@ -1,23 +1,26 @@
 <!-- GFM-TOC -->
-* [Python 之禅](#Python-之禅)
+* [Python 之禅](#python-之禅)
 * [参数传递是值传递还是引用传递](#参数传递是值传递还是引用传递)
 * [深拷贝与浅拷贝](#深拷贝与浅拷贝)
 * [垃圾回收机制](#垃圾回收机制)
 * [del](#del)
-* [元类](#元类)
+* [元类 (metaclass)](#元类-metaclass)
+* [新式类和旧式类](#新式类和旧式类)
 * [type与object](#type与object)
 * [全局解释器锁](#全局解释器锁)
-* [Python的编码](#Python的编码)
-* [with(上下文管理)](#with(上下文管理))
-* [lambda(匿名函数)](#lambda(匿名函数))
+* [Python的编码](#python的编码)
+* [with(上下文管理)](#with)
+* [lambda(匿名函数)](#lambda)
 * [高阶函数](#高阶函数)
 * [yield](#yield)
 * [装饰器](#装饰器)
+* [@property](#property)
 * [函数参数传递](#函数参数传递)
 * [参数默认值的继承性](#参数默认值的继承性)
 * [闭包与延迟锁定](#闭包与延迟锁定)
-* [Pythonic](#Pythonic)
-* [Python的自省](#Python的自省)
+* [Pythonic](#pythonic)
+* [Python的自省](#python的自省)
+* [Timsort](#timsort)
 * [练习](#练习)
 <!-- GFM-TOC -->
 
@@ -1024,6 +1027,7 @@ multiprocessing库的出现很大程度上是为了弥补thread库因为GIL而�
 -   避免最近一次释放GIL锁的线程再次被立即调度
 -   新增线程优先级功能（高优先级线程可以迫使其他线程释放所持有的GIL锁）
 
+
 ## Python的编码
 
 在Python2.x中，有两种字符串类型：str和unicode类型。str存bytes数据，unicode类型存unicode数据
@@ -1039,7 +1043,7 @@ decode: byte string-> Unicode
 
 unicode是离用户更近的数据，bytes是离计算机更近的数据。
 
-##  [with(上下文管理)](https://www.ibm.com/developerworks/cn/opensource/os-cn-pythonwith/)
+##  [with](https://www.ibm.com/developerworks/cn/opensource/os-cn-pythonwith/)
 
 ### 上下文
 处理程序代码的前后语境
@@ -1076,7 +1080,7 @@ with contextor [as var]:
     with_body
 ```
 
-##  lambda(匿名函数)
+##  lambda
 
 ```python
 lambda x,y : x + y
@@ -1250,6 +1254,97 @@ AOP就是写代码的时候 把各个模块中需要重复写的抽取出来，�
 切面的具体表现就是实现公共方法的类
 
 ![](http://images.51cto.com/files/uploadimg/20100412/140615289.jpg)
+
+
+## property
+property 可以视作python的一个专门针对类属性的装饰器
+
+在绑定属性时，如果我们直接把属性暴露出去，虽然写起来很简单，但是，没办法检查参数，导致可以把成绩随便改：
+```
+s = Student()
+s.score = 9999
+```
+
+这显然不合逻辑。为了限制score的范围，可以通过一个set_score()方法来设置成绩，再通过一个get_score()来获取成绩，这样，在set_score()方法里，就可以检查参数：
+```python
+class Student(object):
+
+    def get_score(self):
+        return self._score
+
+    def set_score(self, value):
+        if not isinstance(value, int):
+            raise ValueError('score must be an integer!')
+        if value < 0 or value > 100:
+            raise ValueError('score must between 0 ~ 100!')
+        self._score = value
+```
+现在，对任意的Student实例进行操作，就不能随心所欲地设置score了：
+```python
+>>> s = Student()
+>>> s.set_score(60) # ok!
+>>> s.get_score()
+60
+>>> s.set_score(9999)
+Traceback (most recent call last):
+  ...
+ValueError: score must between 0 ~ 100!
+```
+但是，上面的调用方法又略显复杂，没有直接用属性这么直接简单。
+
+**有没有既能检查参数，又可以用类似属性这样简单的方式来访问类的变量呢？**对于追求完美的Python程序员来说，这是必须要做到的！
+
+还记得装饰器（decorator）可以给函数动态加上功能吗？对于类的方法，装饰器一样起作用。Python内置的`@property`装饰器就是负责把一个方法变成属性调用的：
+```python
+class Student(object):
+
+    @property
+    def score(self):
+        return self._score
+
+    @score.setter
+    def score(self, value):
+        if not isinstance(value, int):
+            raise ValueError('score must be an integer!')
+        if value < 0 or value > 100:
+            raise ValueError('score must between 0 ~ 100!')
+        self._score = value
+```
+`@property`的实现比较复杂，我们先考察如何使用。把一个getter方法变成属性，只需要加上`@property`就可以了，此时，`@property`本身又创建了另一个装饰器`@score.setter`，负责把一个setter方法变成属性赋值，于是，我们就拥有一个可控的属性操作：
+```python
+>>> s = Student()
+>>> s.score = 60 # OK，实际转化为s.set_score(60)
+>>> s.score # OK，实际转化为s.get_score()
+60
+>>> s.score = 9999
+Traceback (most recent call last):
+  ...
+ValueError: score must between 0 ~ 100!
+```
+注意到这个神奇的`@property`，我们在对实例属性操作的时候，就知道该属性很可能不是直接暴露的，而是通过`getter`和`setter`方法来实现的。
+
+还可以定义只读属性，只定义`getter`方法，不定义`setter`方法就是一个只读属性：
+```python
+class Student(object):
+
+    @property
+    def birth(self):
+        return self._birth
+
+    @birth.setter
+    def birth(self, value):
+        self._birth = value
+
+    @property
+    def age(self):
+        return 2014 - self._birth
+```
+上面的birth是可读写属性，而age就是一个只读属性，因为age可以根据birth和当前时间计算出来。
+
+#### property小结
+`@property`**广泛应用在类的定义中，可以让调用者写出简短的代码，同时保证对参数进行必要的检查**，这样，程序运行时就减少了出错的可能性。
+
+
 ## 函数参数传递
 
 1. 位置传递实例：
@@ -1425,9 +1520,84 @@ with open('/path/to/file', 'r') as f:
 	do something...
 ```
 
-## Python的自省(http://blog.csdn.net/longerzone/article/details/17913117)
+## [Python的自省](http://blog.csdn.net/longerzone/article/details/17913117)
 
 自省就是面向对象的语言所写的程序在运行时,所能知道对象的类型.简单一句就是**运行时能够获得对象的类型**.比如type(),dir(),getattr(),hasattr(),isinstance().
+
+## [Timsort](https://blog.csdn.net/yangzhongblog/article/details/8184707)
+Timsort是python `list` 和` sorted()` 内部所使用的排序类型，具有非常好的性能
+
+Timsort是结合了**合并排序**（merge sort）和**插入排序**（insertion sort）而得出的排序算法，它在现实中有很好的效率。Tim Peters在2002年设计了该算法并在Python中使用（TimSort 是 Python 中 list.sort 的默认实现）。该算法找到数据中已经排好序的块-分区，每一个分区叫一个run，然后按规则合并这些run。Pyhton自从2.3版以来一直采用Timsort算法排序，现在Java SE7和Android也采用Timsort算法对数组排序。
+
+### Timsort的核心过程
+
+TimSort 算法**为了减少对升序部分的回溯和对降序部分的性能倒退**，将输入按其升序和降序特点进行了分区。排序的输入的单位不是一个个单独的数字，而是**一个个的块-分区**。其中每一个分区叫一个run。针对这些 run 序列，每次拿一个 run 出来按规则进行合并。每次合并会将两个 run合并成一个 run。合并的结果保存到栈中。合并直到消耗掉所有的 run，这时将栈上剩余的 run合并到只剩一个 run 为止。这时这个仅剩的 run 便是排好序的结果。
+
+综上述过程，Timsort算法的过程包括
+
+1. 如何数组长度小于某个值，直接用二分插入排序算法
+2. 找到各个run，并入栈
+3. 按规则合并run
+
+### **1 操作**
+
+现实中的大多数据通常是有部分已经排好序的，Timsort利用了这一特点。Timsort排序的输入的单位不是一个个单独的数字，而是一个个的分区。其中每一个分区叫一个“run“（图1）。针对这个 run 序列，每次拿一个 run 出来进行归并。每次归并会将两个 run 合并成一个 run。每个run最少要有2个元素。Timesor按照升序和降序划分出各个run：run如果是是升序的，那么run中的后一元素要大于或等于前一元素（a\[lo\] <= a\[lo + 1\] <= a\[lo + 2\] <= ...）；如果run是**严格降序**的，即run中的前一元素大于后一元素（a\[lo\] > a\[lo + 1\] > a\[lo + 2\] > ...），需要将run 中的元素翻转（这里注意降序的部分必须是“严格”降序才能进行翻转。因为**TimSort 的一个重要目标是保持稳定性stability**。如果在 >= 的情况下进行翻转这个算法就不再是 stable）。
+
+#### 1.1 run的最小长度
+
+run是已经排好序的一块分区。run可能会有不同的长度，Timesort根据run的长度来选择排序的策略。例如如果run的长度小于某一个值，则会选择插入排序算法来排序。run的最小长度（minrun）取决于数组的大小。当数组元素少于64个时，那么run的最小长度便是数组的长度，这是Timsort用插入排序算法来排序。当数组元素大于等于63时，对于较大的数组，从32到65范围内选择一个称为min run的数字，使得数组的大小除以minrun的大小等于或略小于2的幂。最后的算法只需要数组大小的六个最重要的位，如果其余位被设置，则添加一个，并将该结果用作minrun。  此算法适用于所有情况，包括数组大小小于64的情况。
+
+![图1 run](http://img.my.csdn.net/uploads/201211/14/1352906485_1428.jpg)
+
+
+#### 1.2 优化run的长度
+优化run的长度是指当run的长度小于minrun时，为了使这样的run的长度达到minrun的长度，会从数组中选择合适的元素插入run中。这样做**使大部分的run的长度达到均衡**，有助于后面run的合并操作。
+
+#### 1.3 合并run
+划分run和优化run长度以后，然后就是对各个run进行合并。合并run的原则是 run合并的技术要保证有最高的效率。当Timsort算法找到一个run时，会将该run在数组中的起始位置和run的长度放入栈中，然后根据先前放入栈中的run决定是否该合并run。Timsort不会合并在栈中不连续的run（Timsort does not merge non-consecutive runs because doing this would cause the element common to all three runs to become out of order with respect to the middle run.）
+
+Timsort会合并在栈中2个连续的run。X、Y、Z代表栈最上方的3个run的长度（图2），当同时不满足下面2个条件是，X、Y这两个run会被合并，直到同时满足下面2个条件，则合并结束：
+1. X>Y+Z
+2. Y>Z
+
+例如：如果X<Y+Z，那么X+Y合并为一个新的run，然后入栈。重复上述步骤，直到同时满足上述2个条件。当合并结束后，Timsort会继续找下一run，然后找到以后入栈，重复上述步骤，及每次run入栈都会检查是否需要合并2个run。
+
+![图2 合并run](http://img.my.csdn.net/uploads/201211/14/1352908249_6357.jpg)
+
+#### 1.4 合并run步骤
+
+合并2个相邻的run需要临时存储空闲，临时存储空间的大小是2个run中较小的run的大小。Timsort算法先将较小的run复制到这个临时存储空间，然后用原先存储这2个run的空间来存储合并后的run（图3）。
+
+![图3 临时存储空间](http://img.my.csdn.net/uploads/201211/15/1352943213_2821.jpg)
+  
+简单的合并算法是用简单插入算法，依次从左到右或从右到左比较，然后合并2个run。为了提高效率，Timsort用 **二分插入算法 （binary merge sort)** 先用二分查找算法/折半查找算法（binary search）找到插入的位置，然后在插入。  
+
+例如，我们要将A和B这2个run 合并，且A是较小的run。因为A和B已经分别是排好序的，**二分查找会找到B的第一个元素在A中何处插入（图4）。同样，A的最后一个元素找到在B的何处插入，找到以后，B在这个元素之后的元素就不需要比较了（图5）。** 这种查找可能在随机数中效率不会很高，但是在其他情况下有很高的效率。
+![图4 run合并过程1](http://img.my.csdn.net/uploads/201211/15/1352943458_7422.jpg)
+
+
+![图5 run合并过程2](http://img.my.csdn.net/uploads/201211/15/1352943470_6939.jpg)
+
+**1.5 Galloping 模型**
+介绍的是类似上述run的合并过程，参见[维基百科 Galloping Model](http://en.wikipedia.org/wiki/Timsort)
+
+### 性能
+根据[信息学理论](http://en.wikipedia.org/wiki/Information_theory)，在平均情况下，比较排序不会比O(n log n)更快。由于Timsort算法利用了现实中大多数数据中会有一些排好序的区，所以Timsort会比  
+O(n log n)快些。对于随机数没有可以利用的排好序的区，Timsort时间复杂度会是log(n!)。下表是Timsort与其他比较排序算法时间复杂度（time complexity）的比较。
+
+![](http://img.my.csdn.net/uploads/201211/15/1352947294_8034.jpg)
+
+空间复杂度（space complexities）比较
+![](http://img.my.csdn.net/uploads/201211/15/1352947419_3920.jpg)
+
+说明：
+
+JSE 7对对象进行排序，没有采用快速排序，是因为快速排序是不稳定的，而Timsort是稳定的。
+下面是JSE7 中Timsort实现代码中的一段话，可以很好的说明Timsort的优势：
+
+> A stable, adaptive, iterative mergesort that requires far fewer than n lg(n) comparisons when running on partially sorted arrays, while offering performance comparable to a traditional mergesort when run on random arrays. Like all proper mergesorts, this sort is stable and runs O(n log n) time (worst case). In the worst case, this sort requires temporary storage space for n/2 object references; in the best case, it requires only a small constant amount of space.
+
+大体是说，Timsort是稳定的算法，当待排序的数组中已经有排序好的数，它的时间复杂度会小于n logn。与其他合并排序一样，Timesrot是稳定的排序算法，最坏时间复杂度是O（n log n）。在最坏情况下，Timsort算法需要的临时空间是n/2，在最好情况下，它只需要一个很小的临时存储空间
 
 ## 练习
 
