@@ -1255,6 +1255,19 @@ AOP就是写代码的时候 把各个模块中需要重复写的抽取出来，�
 
 ![](http://images.51cto.com/files/uploadimg/20100412/140615289.jpg)
 
+### 装饰器是支持叠放的
+
+```python
+@d1
+@d2
+def f():
+    print '13'
+
+# 等同于
+f = d1(d2(f))
+
+```
+
 
 ## property
 property 可以视作python的一个专门针对类属性的装饰器

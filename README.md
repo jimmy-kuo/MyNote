@@ -38,6 +38,7 @@
 《**A Tour of C++**》
 《**STL源码剖析**》
 
+[C++ 学习笔记](https://github.com/h-j-13/MyNote/blob/aac01fe67b60f0ef22ddf98e91831da01462fdcf/Programming%20language/C++/C++%20note.md)
 #### 优秀源码赏析
 
 * STL源码赏析
@@ -59,6 +60,8 @@
 《**Python 核心教程**》*2th edition*
 《**Effective Python**》*(编写高质量Python代码的59个有效方法)*
 《**流畅的python**》
+
+[Pyhon 进阶内容](https://github.com/h-j-13/MyNote/blob/aac01fe67b60f0ef22ddf98e91831da01462fdcf/Programming%20language/Python/Python%20note.md)
 
 #### 源码学习
 	
@@ -96,6 +99,19 @@
 * [汇编语言 学习笔记(四)](http://houjie13.com/articles/2017/11/09/1510213555803.html)
 * 《汇编程序语言设计》 部分习题解答
 
+### HTML
+
+#### 学习笔记
+* [HTML学习笔记](https://github.com/h-j-13/MyNote/blob/aac01fe67b60f0ef22ddf98e91831da01462fdcf/Programming%20language/HTML/HTML_note.MD)
+
+### Shell
+
+#### 学习笔记
+* [shell 学习笔记](https://github.com/h-j-13/MyNote/blob/aac01fe67b60f0ef22ddf98e91831da01462fdcf/Programming%20language/Shell/Shell%20note.md)
+
+#### 练习项目
+* [数据库的自动备份shell脚本](https://github.com/h-j-13/MyNote/blob/aac01fe67b60f0ef22ddf98e91831da01462fdcf/Programming%20language/Shell/mysql_backup_clean.sh)
+
 ### Verilog DHL
 
 #### 学习笔记
@@ -113,11 +129,12 @@
 
 ### 算法导论 & 学习笔记
 
-
+[排序算法总结与C实现](https://github.com/h-j-13/MyNote/blob/aac01fe67b60f0ef22ddf98e91831da01462fdcf/Algorithm/sort%20note.md)     
 [我的算法学习笔记](http://www.jianshu.com/p/47993296f7f8)   
 [分治法学习笔记——最近点对问题](http://www.jianshu.com/p/8bc681afbaff)     
 [算法学习笔记(爬山,退火,遗传算法)](http://www.jianshu.com/p/46d845442afb)		  
 [机器学习 学习笔记（一） 基于朴素贝叶斯的文本分类 （Python 实现）](http://www.jianshu.com/p/5fd446efefe9)
+
 * 密码学
   * [DES 算法实现](https://gist.github.com/h-j-13/1d1d2a29973b7dad29467e6d316f98ad)
   * [RSA 算法实现、素性检测](https://gist.github.com/h-j-13/6880e9a9e580a95357213fddb56121fd)
@@ -157,6 +174,7 @@
 《**MySQL 管理之道** *性能调优,高可用性监控*》  
 《**MySQL内核** InnoDB存储引擎》		  
 《MySQL 必知必会》				  
+《**MySQL 技术内幕** *InnoDB存储引擎*》
 
 * 基于MySQLdb的数据库python脚本(高效,易用,易扩展)
 * 基于InnoDB的MySQL优化my.ini
@@ -176,7 +194,11 @@
 *  WHOIS存储系统
 *  恶意域名 监控系统
 
-#### Elasticsearch
+
+### SQL 语句　 
+* [Leetcode 数据库习题](http://www.jianshu.com/nb/15744112)
+
+### Elasticsearch
 学习笔记
 * [Elasticsearch 学习笔记(一)](http://www.jianshu.com/p/53580217a010)     
 * [Elasticsearch 学习笔记(二)](http://www.jianshu.com/p/258c0eef3d31)
@@ -197,9 +219,6 @@
 《图数据库》*2th edition*
 
 
-### SQL 语句　 
-* [Leetcode 数据库习题](http://www.jianshu.com/nb/15744112)
-
 # 开源框架与开源项目
 
 ### Scrapy
@@ -216,6 +235,9 @@
 #### 个人项目
 * 基于AMPQ的分布式WHOIS获取系统
 
+### WHOIS
+* [python-whois-0.6.7.zh-cn 源码解析](https://github.com/h-j-13/python-whois-0.6.7.zh-cn)
+
 # Web & APP
 
 ### RESTful API
@@ -226,6 +248,9 @@
 
 * [一个 RESTful 风格后台实现](https://github.com/h-j-13/WhoisDataService)
 
+# 设计模式
+
+## 设计模式学习及Python实现
 
 # GUI
 
@@ -233,7 +258,7 @@
 
 #### 个人项目
 * 基于QT的源代码编辑器 - [Racoon](https://github.com/h-j-13/Racoon)
-* 油水混合管道含水率分析系统 - Tinshine
+* 油水混合管道含水率分析系统 - [Tinshine](https://github.com/h-j-13/Tinshine)
 
 # Document
 *学习过程部分自翻文档*
