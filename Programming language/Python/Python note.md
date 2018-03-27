@@ -14,6 +14,7 @@
 * [高阶函数](#高阶函数)
 * [yield](#yield)
 * [装饰器](#装饰器)
+* [@classmethod与@staticmethod](#@classmethod与@staticmethod)
 * [@property](#property)
 * [函数参数传递](#函数参数传递)
 * [参数默认值的继承性](#参数默认值的继承性)
@@ -21,6 +22,7 @@
 * [Pythonic](#pythonic)
 * [Python的自省](#python的自省)
 * [Timsort](#timsort)
+* [元组的相对不可变性](#元组的相对不可变性)
 * [练习](#练习)
 <!-- GFM-TOC -->
 
@@ -67,16 +69,25 @@ Namespaces are one honking great idea -- let's do more of those!
 
 ##  参数传递是值传递还是引用传递
 
-### 引用传递
-都是引用，对于不可改变的数据类型来说，不能改变，如果修改了，事实上是新建一个对象来对待。
-或者说
-Python中有可变对象（比如列表List）和不可变对象（比如字符串），在参数传递时分为两种情况：  
-1.  **对于不可变对象作为函数参数，相当于C系语言的值传递；**  
-2.  **对于可变对象作为函数参数，相当于C系语言的引用传递。**
+### ~~引用传递~~
+~~都是引用，对于不可改变的数据类型来说，不能改变，如果修改了，事实上是新建一个对象来对待。~~
+~~或者说~~
+~~Python中有可变对象（比如列表List）和不可变对象（比如字符串），在参数传递时分为两种情况：~~  
+~~1.  **对于不可变对象作为函数参数，相当于C系语言的值传递；**~~
+~~2.  **对于可变对象作为函数参数，相当于C系语言的引用传递。**~~
 
-再或者
-**传值方式等价于python赋值号(=)**，**但不应该说是浅拷贝**。				
-以list为例，浅拷贝可变对象时(如list)，会创建一个新的list对象，并让新对象内部的每一个元素指向原对象每个元素指向的元素；而赋值号将不会创建新对象，而是直接创建一个引用连接到原对象。函数传值是后者，可以写一个函数，在函数里面打印传入参数的id()，与原值的id()是一样的，因此是直接赋值而不是浅拷贝。
+~~再或者~~
+~~**传值方式等价于python赋值号(=)**，**但不应该说是浅拷贝**。~~				
+~~以list为例，浅拷贝可变对象时(如list)，会创建一个新的list对象，并让新对象内部的每一个元素指向原对象每个元素指向的元素；而赋值号将不会创建新对象，而是直接创建一个引用连接到原对象。函数传值是后者，可以写一个函数，在函数里面打印传入参数的id()，与原值的id()是一样的，因此是直接赋值而不是浅拷贝。~~
+
+### 共享传参
+> 《流畅的Python》 8.4 函数的参数作为引用时
+
+Python 唯一支持的参数传递模式是**共享传参**(call by sharing)。多数面对对象语言都采用这一模式，包括Ruby，Smalltalk和Java（Java的引用类型是这样，基本类型按值传参）       
+
+共享传参指函数的各个形式的参数**获得实参中各个引用的副本**。也就是说，函数内内部的形参是实参的别名。        
+
+这种方案的结果是，**函数可能会修改作为传入参数的可变对象。但是无法修改那些对象的标识**（*即不能把一个对象替换成另一个对象*）
 
 
 ## [深拷贝与浅拷贝](https://www.cnblogs.com/wilber2013/p/4645353.html)
@@ -1223,6 +1234,13 @@ hello()
 以上的代码非常清楚的展示了装饰器的作用，值得一提的是 `*args, **kw` 这是python的可变参数的接收方式，
 这里一定要将接收到的参数传递给装饰器所装饰的函数，即`func(*args, **kw)`
 
+### Python何时执行装饰器
+
+**装饰器的一个关键特性就是，他们在被装饰的函数定义之后立即运行**        
+
+函数装饰器在导入模块时立即执行。而被装饰的函数只在明确调用时运行。*这突出了Python程序员所说的 导入时 与 运行时 之间的区别*
+
+### 参数化装饰器
 
 ### 类装饰器
 还记得元类吗？
@@ -1267,6 +1285,46 @@ def f():
 f = d1(d2(f))
 
 ```
+
+### functools.lru_cahce 做备忘
+functools.lru_cahce 是非常实用的装饰器，实现了备忘功能，即LRU
+
+
+
+## @classmethod与@staticmethod
+```python
+class A(object):
+    def foo(self, x):
+        print("executing foo(%s,%s)" % (self, x))
+        print('self:', self)
+
+    @classmethod
+    def class_foo(cls, x):
+        print("executing class_foo(%s,%s)" % (cls, x))
+        print('cls:', cls)
+
+    @staticmethod
+    def static_foo(x):
+        print("executing static_foo(%s)" % x)    
+
+
+if __name__ == '__main__':
+    a = A()
+
+    a.static_foo('b')
+    a.class_foo('b')
+
+    A.class_foo('b')
+    A.static_foo('b')
+    
+    A.foo(a, 'c')
+```
+
+1. 被`@classmethod`与`@staticmethod`修饰的方法 类和类实例都可以调用
+2. 被`@classmethod与` 修饰的方法第一个参数一定是类
+3. 被`@classmethod`与`@staticmethod`修饰的方法的继承与普通方法一样
+
+
 
 
 ## property
@@ -1611,6 +1669,21 @@ JSE 7对对象进行排序，没有采用快速排序，是因为快速排序是
 > A stable, adaptive, iterative mergesort that requires far fewer than n lg(n) comparisons when running on partially sorted arrays, while offering performance comparable to a traditional mergesort when run on random arrays. Like all proper mergesorts, this sort is stable and runs O(n log n) time (worst case). In the worst case, this sort requires temporary storage space for n/2 object references; in the best case, it requires only a small constant amount of space.
 
 大体是说，Timsort是稳定的算法，当待排序的数组中已经有排序好的数，它的时间复杂度会小于n logn。与其他合并排序一样，Timesrot是稳定的排序算法，最坏时间复杂度是O（n log n）。在最坏情况下，Timsort算法需要的临时空间是n/2，在最好情况下，它只需要一个很小的临时存储空间
+
+## 元组的相对不可变性
+
+元组的不可变性其实是指tuple数据结构的屋里内容（即保存的引用）不可变，与引用的对象无关。     
+
+元组的值会随着引用的可变对象的变化而变。**元组中不可变的是对象的标识**
+
+```python
+t1 = (1, 2, [3, 4])
+t1[-1].append(5)
+
+>>> t1
+(1, 2, [3, 4, 5])
+
+```
 
 ## 练习
 
