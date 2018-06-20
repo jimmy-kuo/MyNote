@@ -28,11 +28,11 @@ print str(data_size) + " 个 " + str(d) + " 维向量,每个向量的 k=" + str(
 start = time.time()
 
 # 创建索引模型并添加向量
-index = faiss.IndexFlatL2(d)  # 创建 d 维的 FlatL2 索引
-# print(index.is_trained)       # 该索引是否训练过
-# print(index.ntotal)           # 索引容量
-index.add(data)  # 将数据添加进索引
-D, I = index.search(data, k)  # 搜索每一个数据的的k临近向量
+index = faiss.IndexFlatL2(d)            # 创建 d 维的 FlatL2 索引
+# print(index.is_trained)               # 该索引是否训练过
+# print(index.ntotal)                   # 索引容量
+index.add(data)                         # 将数据添加进索引
+D, I = index.search(data, k)            # 搜索每一个数据的的k临近向量
 
 # 输出结果
 print "Used %.2f sec." % (time.time() - start)
