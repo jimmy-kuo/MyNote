@@ -1,15 +1,20 @@
+# encoding:utf-8
+
 # Copyright (c) 2015-present, Facebook, Inc.
 # All rights reserved.
 #
 # This source code is licensed under the BSD+Patents license found in the
 # LICENSE file in the root directory of this source tree.
 
+# author    : Facebook
+# translate : h-j-13
+
 import numpy as np
 
-d = 64                           # dimension
-nb = 100000                      # database size
-nq = 10000                       # data_size of queries
-np.random.seed(1234)             # make reproducible
+d = 64                              # 向量维度
+nb = 100000                         # 向量集大小
+nq = 10000                          # 查询次数
+np.random.seed(1234)                # 随机种子,使结果可复现
 xb = np.random.random((nb, d)).astype('float32')
 xb[:, 0] += np.arange(nb) / 1000.
 xq = np.random.random((nq, d)).astype('float32')
@@ -20,14 +25,14 @@ import faiss
 nlist = 100
 m = 8
 k = 4
-quantizer = faiss.IndexFlatL2(d)  # this remains the same
+quantizer = faiss.IndexFlatL2(d)    # 内部的索引方式依然不变
 index = faiss.IndexIVFPQ(quantizer, d, nlist, m, 8)
-                                  # 8 specifies that each sub-vector is encoded as 8 bits
+                                    # 每个向量都被编码为8个字节大小
 index.train(xb)
 index.add(xb)
-D, I = index.search(xb[:5], k) # sanity check
+D, I = index.search(xb[:5], k)      # 测试
 print(I)
 print(D)
-index.nprobe = 10              # make comparable with experiment above
-D, I = index.search(xq, k)     # search
+index.nprobe = 10                   # 与以前的方法相比
+D, I = index.search(xq, k)          # 检索
 print(I[-5:])

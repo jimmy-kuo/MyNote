@@ -1,15 +1,19 @@
+# encoding:utf-8
+
 # Copyright (c) 2015-present, Facebook, Inc.
 # All rights reserved.
 #
 # This source code is licensed under the BSD+Patents license found in the
 # LICENSE file in the root directory of this source tree.
 
-import numpy as np
+# author    : Facebook
+# translate : h-j-13
 
-d = 64                           # dimension
-nb = 100000                      # database size
-nq = 10000                       # data_size of queries
-np.random.seed(1234)             # make reproducible
+import numpy as np
+d = 64                              # 向量维度
+nb = 100000                         # 向量集大小
+nq = 10000                          # 查询次数
+np.random.seed(1234)                # 随机种子,使结果可复现
 xb = np.random.random((nb, d)).astype('float32')
 xb[:, 0] += np.arange(nb) / 1000.
 xq = np.random.random((nq, d)).astype('float32')
@@ -27,9 +31,9 @@ assert not index.is_trained
 index.train(xb)
 assert index.is_trained
 
-index.add(xb)                  # add may be a bit slower as well
-D, I = index.search(xq, k)     # actual search
-print(I[-5:])                  # neighbors of the 5 last queries
-index.nprobe = 10              # default nprobe is 1, try a few more
+index.add(xb)                  # 添加索引可能会有一点慢
+D, I = index.search(xq, k)     # 搜索
+print(I[-5:])                  # 最初五次查询的结果
+index.nprobe = 10              # 默认 nprobe 是1 ,可以设置的大一些试试
 D, I = index.search(xq, k)
-print(I[-5:])                  # neighbors of the 5 last queries
+print(I[-5:])                  # 最后五次查询的结果
