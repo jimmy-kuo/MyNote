@@ -11,10 +11,11 @@ import time
 import numpy
 
 import faiss
+from recall_data import recall_data
 
 # 基本参数
 d = 300                 # 向量维数
-data_size = 1000000      # 数据库大小
+data_size = 10000       # 数据库大小
 k = 50
 
 # 生成测试数据
@@ -35,4 +36,5 @@ D, I = index.search(data[:50], k)               # 搜索每一个数据的的k�
 # 输出结果
 print "Used %.2f ms" % ((time.time() - start_time)*1000)
 # print D
-print I
+with open("123.data","w") as f:
+    f.writelines(str(I.tolist()))
