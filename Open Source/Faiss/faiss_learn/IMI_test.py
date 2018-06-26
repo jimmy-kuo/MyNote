@@ -12,7 +12,7 @@ import faiss
 
 # 基本参数
 d = 300  # 向量维数
-data_size = 100000  # 数据库大小
+data_size = 500000  # 数据库大小
 k = 50
 
 # 构建索引
