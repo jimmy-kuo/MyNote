@@ -7,6 +7,9 @@ Python 文件读写测试 - 基础IO接口 + numpy
 author  : h-j-13
 time    : 2018-06-26
 """
+
+# note : 未优化时候 7 - min
+
 import os
 import time
 import numpy
@@ -33,7 +36,7 @@ def readfile2ids_vec(file_path):
     vec = []
     # 使用 for line in f(文件描述符) 遍历文件,内部自身缓冲I/O
     # ref : https://stackoverflow.com/questions/8009882/how-to-a-read-large-file-line-by-line-in-python/8010133#8010133
-    with open(file_path, "r") as f:
+    with open(file_path, "rb") as f:
         for line in f:
             try:
                 v_id, v = line.split(" ", 1)
@@ -50,7 +53,7 @@ def readfile2ids_vec(file_path):
 def readfile2vec(file_path):
     """读取目标路径下的文档,并转换为矩阵"""
     vec = []
-    with open(file_path, "r") as f:
+    with open(file_path, "rb") as f:
         for line in f:
             try:
                 _, v = line.split(" ", 1)
@@ -65,7 +68,7 @@ def readfile2vec(file_path):
 def writeSearchResult(file_path, ids, I):
     """写入搜索结果至指定文件夹下"""
     write_buff = []
-    with open(file_path, 'w') as f:
+    with open(file_path, 'wb') as f:
         for vectors_id, vectors in zip(ids, I):
             write_buff.extend([str(vectors_id) + " " + str(v) + "\n" for v in vectors])
         f.writelines(write_buff)
