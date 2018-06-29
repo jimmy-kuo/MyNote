@@ -2,6 +2,8 @@
 
 """
 faiss库 - 海量高维域名相似度计算
+基于通道的异步获取
+
 author  :   h-j-13
 time    :   2018-6-25
 """
@@ -25,15 +27,13 @@ INPUT_FILE_PATH = './data/'
 OUTPUT_FILE_PATH = './result/ios/'
 OUTPUT_FILE_BASIC_NAME = 'faiss_kNN_'
 FILE_NAME_LIST = File_IO.getAllFileName(INPUT_FILE_PATH)
-READ_FILE_NUM = 2  # 每次读取的文件数目
+READ_FILE_NUM = 3  # 每次读取的文件数目
 
 # 进程通信变量
 # 进程之间默认是不能共享全局变量的,需要通过 multiprocessing.value对象
 FILE_IDS_VECTOR_QUEUE = Queue()
 FILE_IDS_VECTOR_QUEUE_FOR_SEARCH = Queue()
 FILE_WRITE_QUEUE = Queue()
-READ_FILE_LOCK = Value("i", 0)
-READ_FILE_LOCK_FOR_SEARCH = Value("i", 0)
 START_RAED = Value("i", 0)
 START_READ_FOR_SEARCH = Value("i", 0)
 END_READ = Value("i", 0)
@@ -44,8 +44,7 @@ WRITE_FILE_PROCESS = None
 
 def read_file_process(start_file_num=TRAIN_FILE_SIZE,
                       file_path=INPUT_FILE_PATH,
-                      file_name_list=FILE_NAME_LIST,
-                      read_file_num=READ_FILE_NUM):
+                      file_name_list=FILE_NAME_LIST, ):
     """
     读取文件轮询进程,数据通过全局变量/队列进行交互
     :param start_file_num:  开始读取的文件序号(前几个文件经过训练已经加载到索引中)
@@ -54,68 +53,46 @@ def read_file_process(start_file_num=TRAIN_FILE_SIZE,
     :param read_file_num:   一次性读取文件数量
     :return:
     """
-    global START_RAED, END_READ, READ_FILE_LOCK, FILE_IDS_VECTOR_QUEUE
+    global START_RAED, END_READ, FILE_IDS_VECTOR_QUEUE, READ_FILE_NUM
 
     while not START_RAED.value:  # 等待主进程信号
         time.sleep(1)
 
-    for i in xrange(start_file_num, len(file_name_list), read_file_num):
+    for i in xrange(start_file_num, len(file_name_list)):
 
-        while not READ_FILE_LOCK.value:  # 等待主进程信号
+        while FILE_IDS_VECTOR_QUEUE.qsize() > READ_FILE_NUM:  # 控制队列大小
             time.sleep(1)
 
-        while FILE_IDS_VECTOR_QUEUE.qsize() > READ_FILE_NUM * 3:  # 控制进程数量
-            time.sleep(1)
+        file_name = file_name_list[i]
+        ids, data = File_IO.readfile2ids_vec(file_path + file_name)
+        FILE_IDS_VECTOR_QUEUE.put((ids, data))
+        print File_IO.getLocalTimeStr(),
+        print file_name + " 向量数据添加至队列"
 
-        need2read = file_name_list[i:i + read_file_num]
-        if need2read:  # 本次需要读取的文件列表
-            for file_name in need2read:
-                ids, data = File_IO.readfile2ids_vec(file_path + file_name)
-                FILE_IDS_VECTOR_QUEUE.put((ids, data))
-                print File_IO.getLocalTimeStr(),
-                print file_name + " 向量数据添加至队列"
-
-        else:
-            END_READ.value = 1
-
-        READ_FILE_LOCK.value = 0  # 向主进程回送读取完毕的信号
-
-    READ_FILE_LOCK.value = 0
-    END_READ.value = 1
-
+    END_READ.value = 1  # 告知主进程处理结束
     return
 
 
 def read_file_for_search_process(file_path=INPUT_FILE_PATH,
-                                 file_name_list=FILE_NAME_LIST,
-                                 read_file_num=READ_FILE_NUM):
+                                 file_name_list=FILE_NAME_LIST, ):
     """读取文件轮询进程,数据通过全局变量/队列进行交互(执行搜索时用)"""
 
-    global START_READ_FOR_SEARCH, END_READ_FOR_SEARCH, \
-        READ_FILE_LOCK_FOR_SEARCH, FILE_IDS_VECTOR_QUEUE_FOR_SEARCH
+    global START_READ_FOR_SEARCH, END_READ_FOR_SEARCH, FILE_IDS_VECTOR_QUEUE_FOR_SEARCH, READ_FILE_NUM
 
     while not START_READ_FOR_SEARCH.value:  # 等待主进程信号
         time.sleep(1)
 
-    for i in xrange(0, len(file_name_list), read_file_num):
-
-        while not READ_FILE_LOCK_FOR_SEARCH.value:  # 等待主进程信号
+    for file_name in file_name_list:
+        # 控制队列大小
+        while FILE_IDS_VECTOR_QUEUE_FOR_SEARCH.qsize() > READ_FILE_NUM:
             time.sleep(1)
 
-        need2read = file_name_list[i:i + read_file_num]
-        if need2read:  # 本次需要读取的文件列表
-            for file_name in need2read:
-                ids, data = File_IO.readfile2ids_vec(file_path + file_name)
-                FILE_IDS_VECTOR_QUEUE_FOR_SEARCH.put((ids, data))
-                print File_IO.getLocalTimeStr(),
-                print file_name + " 向量数据添加至待搜索队列"
+        ids, data = File_IO.readfile2ids_vec(file_path + file_name)
+        FILE_IDS_VECTOR_QUEUE_FOR_SEARCH.put((ids, data))
+        print File_IO.getLocalTimeStr(),
+        print file_name + " 向量数据添加至待搜索队列"
 
-        else:
-            END_READ_FOR_SEARCH.value = 1
-
-        READ_FILE_LOCK_FOR_SEARCH.value = 0  # 向主进程回送读取完毕的信号
-
-    READ_FILE_LOCK_FOR_SEARCH.value = 0
+    # 向主进程回送读取完毕的信号
     END_READ_FOR_SEARCH.value = 1
 
     return
@@ -127,24 +104,25 @@ def write_file_process():
 
     while not END_WRITE_FILE.value:
         if not FILE_WRITE_QUEUE.empty():
-            (file_path, ids, I) = FILE_WRITE_QUEUE.get()
-            File_IO.writeSearchResult(file_path, ids, I)
+            (file_path, ids, I, D) = FILE_WRITE_QUEUE.get()
+            File_IO.writeSearchResult(file_path, ids, I, D)
             print File_IO.getLocalTimeStr() + " wp完成了一轮向量搜索.结果写入 " + str(file_path)
         else:
             time.sleep(1)
 
     print File_IO.getLocalTimeStr() + " 结果队列中尚未处理数量:" + str(FILE_WRITE_QUEUE.qsize())
+
     # 最后将队列内的文件处理完
     while not FILE_WRITE_QUEUE.empty():
-        (file_path, ids, I) = FILE_WRITE_QUEUE.get()
-        File_IO.writeSearchResult(file_path, ids, I)
+        (file_path, ids, I, D) = FILE_WRITE_QUEUE.get()
+        File_IO.writeSearchResult(file_path, ids, I, D)
         print File_IO.getLocalTimeStr() + " wp完成了一次向量搜索.结果写入 " + str(file_path)
 
 
 def IndexInit(index_str="OPQ8_64,IVF100,PQ8", d=D):
     """初始化,生成并训练索引"""
     global INPUT_FILE_PATH, FILE_NAME_LIST, TRAIN_FILE_SIZE
-    global START_RAED, READ_FILE_LOCK, WRITE_FILE_PROCESS
+    global START_RAED, WRITE_FILE_PROCESS
 
     # 初始化I/O进程
     rfp = Process(target=read_file_process, name='ReadFiledata')
@@ -179,7 +157,6 @@ def IndexInit(index_str="OPQ8_64,IVF100,PQ8", d=D):
 
     # 同时通知I/O进程开始读写数据
     START_RAED.value = 1
-    READ_FILE_LOCK.value = 1
 
     # 载入训练数据
     index.add_with_ids(train_data, ids)
@@ -192,26 +169,20 @@ def IndexInit(index_str="OPQ8_64,IVF100,PQ8", d=D):
 
 def add_vectors(index):
     """向索引中添加向量"""
-    global END_READ, READ_FILE_LOCK, FILE_IDS_VECTOR_QUEUE
+    global END_READ, START_READ_FOR_SEARCH, FILE_IDS_VECTOR_QUEUE
 
     # 当读写进程都写完成并把数据从队列里全部取出时,添加向量过程结束
     while not END_READ.value:
-        while READ_FILE_LOCK.value:
-            time.sleep(1)  # 等待I/O进程读取完毕的信号
-
-        READ_FILE_LOCK.value = 1  # 通知读写进程开始下一轮读取
-
-        for i in xrange(READ_FILE_NUM):
-            if not FILE_IDS_VECTOR_QUEUE.empty():
-                (ids, vec) = FILE_IDS_VECTOR_QUEUE.get()
-                if len(ids):
-                    index.add_with_ids(vec, ids)
-                    print File_IO.getLocalTimeStr() + " 向量数据添加..."
+        if not FILE_IDS_VECTOR_QUEUE.empty():
+            (ids, vec) = FILE_IDS_VECTOR_QUEUE.get()
+            if len(ids):
+                index.add_with_ids(vec, ids)
+                print File_IO.getLocalTimeStr() + " 向量数据添加..."
+        else:
+            time.sleep(1)
 
     # 同时通知I/O进程开始准备搜索用数据
-    global START_READ_FOR_SEARCH, READ_FILE_LOCK_FOR_SEARCH
     START_READ_FOR_SEARCH.value = 1
-    READ_FILE_LOCK_FOR_SEARCH.value = 1
 
     # 若队列里还有数据,则将其取完
     print File_IO.getLocalTimeStr() + " 添加队列中尚未处理数量:" + str(FILE_IDS_VECTOR_QUEUE.qsize())
@@ -225,34 +196,29 @@ def add_vectors(index):
 def search_kNN(index):
     """搜索临近向量"""
     global OUTPUT_FILE_PATH, OUTPUT_FILE_BASIC_NAME, END_WRITE_FILE, FILE_WRITE_QUEUE, WRITE_FILE_PROCESS
-    global FILE_IDS_VECTOR_QUEUE_FOR_SEARCH, READ_FILE_LOCK_FOR_SEARCH, END_READ_FOR_SEARCH
+    global FILE_IDS_VECTOR_QUEUE_FOR_SEARCH, END_READ_FOR_SEARCH
     global K
 
     print File_IO.getLocalTimeStr() + " 开始执行搜索,目前索引中向量数量:" + str(index.ntotal)
 
     fcnt = 0
-    # 当读写进程都写完成并把数据从队列里全部取出时,添加向量过程结束
-    while not END_READ_FOR_SEARCH.value:
-        while READ_FILE_LOCK_FOR_SEARCH.value:
-            time.sleep(1)  # 等待I/O进程读取完毕的信号
+    while (not END_READ_FOR_SEARCH.value) or (not FILE_IDS_VECTOR_QUEUE_FOR_SEARCH.empty()):
+        if not FILE_IDS_VECTOR_QUEUE_FOR_SEARCH.empty():
+            (ids, vec) = FILE_IDS_VECTOR_QUEUE_FOR_SEARCH.get()
+            if len(ids):  # 搜索
+                D, I = index.search(vec, K)
+                # 将结果添加进写入进程
+                file_path = OUTPUT_FILE_PATH + OUTPUT_FILE_BASIC_NAME + str(fcnt)
+                fcnt += 1
 
-        READ_FILE_LOCK_FOR_SEARCH.value = 1  # 通知读写进程开始下一轮读取
+                # 避免在队列里积累太多向量
+                while FILE_WRITE_QUEUE.qsize() > READ_FILE_NUM:
+                    time.sleep(1)
 
-        # 读取出上一轮添加的域名数量需要搜索的向量
-        for i in xrange(READ_FILE_NUM):
-            if not FILE_IDS_VECTOR_QUEUE_FOR_SEARCH.empty():
-                (ids, vec) = FILE_IDS_VECTOR_QUEUE_FOR_SEARCH.get()
-                if len(ids):  # 搜索
-                    _, I = index.search(vec, K)
-                    # 将结果添加进写入进程
-                    file_path = OUTPUT_FILE_PATH + OUTPUT_FILE_BASIC_NAME + str(fcnt)
-                    fcnt += 1
-                    # 避免在队列里积累太多向量
-                    if FILE_WRITE_QUEUE.qsize() < READ_FILE_NUM * 3:
-                        FILE_WRITE_QUEUE.put((file_path, ids, I))
-                    else:
-                        File_IO.writeSearchResult(file_path, ids, I)
-                        print File_IO.getLocalTimeStr() + " 完成了一轮向量搜索.结果写入 " + str(file_path)
+                FILE_WRITE_QUEUE.put((file_path, ids, I, D))
+
+        else:
+            time.sleep(1)
 
     END_WRITE_FILE.value = 1
     WRITE_FILE_PROCESS.join()
@@ -269,3 +235,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+    # orgin 58s
+    # after tain 40s 39s

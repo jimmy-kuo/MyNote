@@ -65,17 +65,18 @@ def readfile2vec(file_path):
     return vec
 
 
-def writeSearchResult(file_path, ids, I):
+def writeSearchResult(file_path, ids, I, D):
     """写入搜索结果至指定文件夹下"""
     write_buff = []
     with open(file_path, 'wb') as f:
-        for vectors_id, vectors in zip(ids, I):
-            write_buff.extend([str(vectors_id) + " " + str(v) + "\n" for v in vectors])
+        for vectors_id, vectors, distances in zip(ids, I, D):
+            write_buff.extend(
+                [str(vectors_id) + " " + str(v) + " " + str(d) + "\n" for v, d in zip(vectors, distances)])
         f.writelines(write_buff)
 
 
 if __name__ == '__main__':
-    open("./result/1.txt",'w')
+    open("./result/1.txt", 'w')
     # print getAllFileName('./data/')
     #
     # import time
