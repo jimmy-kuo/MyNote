@@ -10,26 +10,15 @@
 # translate : h-j-13
 
 import numpy as np
-
-d = 3                               # 向量维度
-nb = 100000                         # 向量集大小
-nq = 10000                          # 查询次数
-np.random.seed(1234)                # 随机种子,使结果可复现
-xb = np.random.random((nb, d)).astype('float32')
-xb[:, 0] += np.arange(nb) / 1000.   # 每一项增加了一个等差数列的对应项数
-xq = np.random.random((nq, d)).astype('float32')
-xq[:, 0] += np.arange(nq) / 1000.
+d = 30                      # 向量维度
+data_size = 10000                   # 测试数据大小
+xb = np.random.random((data_size, d)).astype('float32')
 
 import faiss
 index = faiss.IndexFlatL2(d)        # 构建FlatL2索引
-print(index.is_trained)
+# index.train(xb)                   # FlatL2执行暴力搜索,无需训练
 index.add(xb)                       # 向索引中添加向量
-print(index.ntotal)
 
 k = 4                               # k=4的 k临近搜索
-D, I = index.search(xb[:5], k)      # 测试
-print(I)
-print(D)
-D, I = index.search(xq, k)          # 执行搜索
-print(I[:5])                        # 最初五次查询的结果
-print(I[-5:])                       # 最后五次查询的结果
+D, I = index.search(xb[:5], k)      # 进行搜索
+# 向量距离矩阵保存在变量D中,临近向量id保存在I中

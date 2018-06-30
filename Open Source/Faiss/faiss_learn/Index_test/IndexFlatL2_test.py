@@ -11,36 +11,49 @@ import time
 import numpy
 
 import faiss
-from recall_data import recall_data
+from recall_data import *
 
 # 基本参数
-d = 300                 # 向量维数
-data_size = 10000       # 数据库大小
-k = 50
+d = 300
+
+# 向量维数
+data_size = 100000  # 数据库大小
+k = 10
+
+test_size = 50
 
 # 生成测试数据
 numpy.random.seed(13)
 data = numpy.random.random(size=(data_size, d)).astype('float32')
-test_data = recall_data
 
 # 创建索引模型并添加向量
-index = faiss.IndexFlatIP(d)                    # 利用点积作为索引
-print(index.is_trained)                       # 该索引是否训练过
-# print(index.ntotal)                           # 索引容量
+index = faiss.index_factory(d, "PCAR256,IVF300,SQ8")
+index.train(data)
+print "Train index complete!"
 start_time = time.time()
-index.add(data)                                 # 将数据添加进索引
+index.add(data)  # 将数据添加进索引
 print "Add vector Used %.2f sec." % (time.time() - start_time)
 
 start_time = time.time()
-D, I = index.search(data[:50], k)               # 搜索每一个数据的的k临近向量
-# 输出结果
-print "Used %.2f ms" % ((time.time() - start_time)*1000)
-recall_1_count = 0
-recall_50_count = 0
-for (search_vec, test_vec) in zip(I, test_data):
-    if test_vec[0] in search_vec:
-        recall_1_count += 1
-    recall_50_count += len(set(search_vec.tolist()) & set(test_vec))
-print "recall1@50 = " + str(recall_1_count / (50.0))
-print "recall50@50 = " + str(recall_50_count / (50.0 * 50.0))
+_, I = index.search(data[:test_size], k)  # 搜索每一个数据的的k临近向量
+print "Used %.2f ms per vec" % ((time.time() - start_time) * 1000 / test_size)
 
+r1count = 0
+r50count = 0
+r100count = 0
+r500count = 0
+r1000count = 0
+
+for (search_vec, v50, v100, v500, v1000) in zip(I, r50, r100, r500, r1000):
+    if search_vec[0] == v50[0]:
+        r1count += 1
+    r50count += len(set(search_vec.tolist()) & set(v50))
+    r100count += len(set(search_vec.tolist()) & set(v100))
+    r500count += len(set(search_vec.tolist()) & set(v500))
+    r1000count += len(set(search_vec.tolist()) & set(v1000))
+
+print "recall1@1 = " + str(r1count / float(test_size))
+print "recall%d@50 = " % k + str(r50count / float(test_size))
+print "recall%d@100 = " % k + str(r100count / float(test_size))
+print "recall%d@500 = " % k + str(r500count / float(test_size))
+print "recall%d@1000 = " % k + str(r1000count / float(test_size))
