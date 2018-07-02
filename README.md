@@ -235,6 +235,17 @@
 #### 个人项目
 * 基于AMPQ的分布式WHOIS获取系统
 
+### [faiss](https://github.com/facebookresearch/faiss)
+faiss 是由 Facebook 开源的一个基于乘积量化(Product Quantization)的高效向量相似检索框架     
+
+学习笔记
+* [Ubuntu 16.04 下 faiss 安装笔记](https://www.jianshu.com/p/2645510a39de)
+* [faiss 学习笔记(一) | 三种基础索引方式学习](https://www.jianshu.com/p/43db601b8af1)
+* [faiss 学习笔记(二) | index 学习](https://www.jianshu.com/p/d35198c5bc23)
+
+#### 个人项目
+基于faiss的相似向量检索
+
 ### WHOIS
 * [python-whois-0.6.7.zh-cn 源码解析](https://github.com/h-j-13/python-whois-0.6.7.zh-cn)
 
