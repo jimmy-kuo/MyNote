@@ -1,0 +1,34 @@
+//登记接口
+
+[{
+    "methodName":"get，/check/checkin",
+    "outline":"单人登记房间请求接口" ,
+    "parameter":"uid公司名，user用户名，rid，sdate，edate，roomername，roomertel，roomerid，remark"
+}
+,
+
+{
+    "methodName":"get，/check/checkin",
+    "outline":"单人登记房间响应接口" ,
+    "parameter":"success成功与否，message信息"
+},
+
+
+{
+    "methodName":"get，/check/teamcheckin",
+    "outline":"团队登记房间请求接口" ,
+    "parameter":"uid公司名，user用户名，edate，rid（xx,x)，roomername，roomertel，roomerid，remark）"
+}
+,
+
+{
+    "methodName":"get，/check/teamcheckin",
+    "outline":"团队登记房间响应接口" ,
+    "parameter":"success成功与否，message信息"
+},
+
+
+
+
+
+]

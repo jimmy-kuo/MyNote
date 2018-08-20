@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+	<title>员工账户管理 | 客房管理系统</title>
+	<!-- start:bootstrap v3.2.0 -->
+	<link rel="stylesheet" type="text/css" href="../static/css/bootstrap.min.css">
+	<!-- start:font awesome v4.1.0 -->
+	<link rel="stylesheet" type="text/css" href="../static/css/font-awesome.min.css">
+    <!-- start:bootstrap reset -->
+    <link rel="stylesheet" type="text/css" href="../static/css/bootstrap-reset.css">
+	<!-- start:style arjuna -->
+	<link rel="stylesheet" type="text/css" href="../static/css/arjuna.css">
+    <!-- start:style for this page -->
+    <link rel="stylesheet" href="../static/plugins/data-tables/DT_bootstrap.css" />
+	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+        function loadjscssfile(filename) {
+            var fileref = document.createElement('script');
+            fileref.setAttribute("type", "text/javascript");
+            fileref.setAttribute("src", filename);
+            document.getElementsByTagName("head")[0].appendChild(fileref);
+        }
+        
+        function getuser() { 
+            $.ajax({
+                type: 'get',
+                url: 'http://127.0.0.1:8000/administrator/getusers', 
+                async:false, 
+                data: {
+                },
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function(data) {
+                    if(data.success==true){
+                        var tbody=document.getElementById("userinfo"); 
+                        var data1=data.data;
+                        var str="";
+                        for (i in data1) {  
+                            str+="<tr>"+
+                            "<td>" + data1[i].user + "</td>" +  
+                            "<td>" + data1[i].password + "</td>" +  
+                            "</tr>";
+                            }  
+                        tbody.innerHTML = str;
+                        $("#editable-sample").dataTable().fnDestroy();
+                        loadjscssfile("../static/js/jquery-1.11.1.min.js");
+                        loadjscssfile("../static/js/bootstrap.min.js");
+                        loadjscssfile("../static/js/arjuna.js");
+                        loadjscssfile("../static/plugins/data-tables/jquery.dataTables.js");
+                        loadjscssfile("../static/plugins/data-tables/DT_bootstrap.js");
+                        loadjscssfile("../static/js/editable-table.js");
+                        var fileref = document.createElement('script');
+                        fileref.setAttribute("type", "text/javascript");
+                        fileref.innerHTML="jQuery(document).ready(function() {EditableTable.init();});";
+                        document.getElementsByTagName("head")[0].appendChild(fileref);
+                    }
+                    else{
+                        alert("查询失败");
+                    }
+                },
+                error: function() {
+                    alert("查询失败,请检查服务器");
+                },
+            })
+        }
+        function inputnew() {
+            document.getElementById("inputForm").style.display="block";
+        }
+
+        function adduser(filename) {
+            var user=document.getElementById('user').value;
+            var password=document.getElementById('password').value;    
+            $.ajax({
+                type: 'get',
+                url: 'http://127.0.0.1:8000/administrator/setusers', 
+                async:false, 
+                data: {
+                    "user": user,
+                    "password": password
+                },
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function(data) {
+                    if(data.success==true){
+                        alert(data.message);
+                    }
+                    else{
+                        alert(data.message);
+                    }
+                },
+                error: function() {
+                    alert("数据交互出错");
+                },
+            })
+        }
+
+       
+
+    </script>
+</head>
+<body class="cl-default fixed" onload="getuser()">
+
+    <!-- start:navbar top -->
+    <!-- start:navbar top -->
+    <header class="header">
+            <a href="index.html" class="logo">
+                <i class="fa fa-pied-piper-alt"></i> 酒店客房管理
+            </a>
+            <!-- Header Navbar: style can be found in header.less -->
+            <nav class="navbar navbar-static-top" role="navigation">
+                <!-- Sidebar toggle button-->
+                <a href="#" class="navbar-btn sidebar-toggle" data-target="#atas" data-toggle="offcanvas" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+        
+                <div class="collapse navbar-collapse" id="atas">
+                   
+                    
+                </div>
+            </nav> -->
+        </header>
+        <!-- end:navbar top -->
+
+    <!-- start:wrapper body -->
+    <div class="wrapper row-offcanvas row-offcanvas-left">
+            <!-- start:left sidebar -->
+            <aside class="left-side sidebar-offcanvas">
+                <section class="sidebar">
+                    <!-- Sidebar user panel -->
+                    <div class="info">
+                        <strong style="color: #eee;" font style="font-size:14px">您好，欢迎使用客房后台管理系统</strong>
+                        <br></br>
+                    </div>
+                    <!-- sidebar menu: : style can be found in sidebar.less -->
+                    <ul class="sidebar-menu">
+                        <li class="active">
+                            <a href="index.html">
+                                <i class="fa fa-dashboard"></i> <span>房间信息</span>
+                            </a>
+                        </li>
+                        <li class="active">
+                             <a href="finance.html">
+                                 <i class="fa fa-dashboard"></i> <span>财务查询</span>
+                            </a>
+                        </li>
+                        <li class="active">
+                            <a href="user.html">
+                                <i class="fa fa-dashboard"></i> <span>操作员信息</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- start:project stats -->
+                    
+                </section>
+            </aside>
+            <!-- end:left sidebar -->
+
+
+        <!-- start:right sidebar -->
+        <aside class="right-side">
+            <section class="content">
+                <p style="font-size:20px;"><i class="fa fa-home icon-square icon-info"></i>员工账号管理</p>
+                <!-- start:content -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <!-- start:editable table -->
+                        <div class="box">
+                            <div class="adv-table editable-table ">
+                                <div class="space15"></div>
+                                <table class="table table-striped table-hover table-bordered" id="editable-sample">
+                                        <thead>
+                                            <tr>
+                                                <th>员工账号</th>
+                                                <th>员工密码</th>
+                        
+                                            </tr>
+                                        </thead>
+                                        <tbody id="userinfo">
+
+                                        </tbody>
+                                    </table>
+                            </div>
+                            <hr>
+                            <div class="clearfix">
+                                    <div class="btn-group">
+                                            <button onclick="inputnew()" class="btn btn-primary">
+                                                添加新的员工 <i class="fa fa-plus"></i>
+                                            </button>
+                                    </div>
+                            </div>
+                            <div>
+                                <form hidden id="inputForm">
+                                    <label for="user">请输入账号：</label><input type="text" id="user">
+                                    <label for="password">请输入密码：</label><input type="text" id="password">
+                                    <button type="submit" onclick="adduser()">添加该员工</button>
+                                </form>
+                            </div>
+                        </div>
+                        <!-- end:editable table -->
+                    </div>
+                </div>
+                <!-- end:content -->
+
+            </section>
+        </aside>
+        <!-- end:right sidebar -->
+
+    </div>
+    <!-- end:wrapper body -->
+
+	<!-- start:javascript for all pages -->
+    <script src="../static/js/jquery-1.11.1.min.js"></script>
+    <script src="../static/js/bootstrap.min.js"></script>
+    <script src="../static/js/arjuna.js"></script>
+	<!-- end:javascript for all pages-->
+
+    <!-- start:javascript for this page -->
+    <script src="../static/plugins/data-tables/jquery.dataTables.js"></script>
+    <script src="../static/plugins/data-tables/DT_bootstrap.js"></script>
+    <script src="../static/js/editable-table.js"></script>
+    <script>
+        jQuery(document).ready(function() {
+            EditableTable.init();
+        });
+    </script>
+    <!-- end:javascript for this page -->
+
+</body>
+</html>

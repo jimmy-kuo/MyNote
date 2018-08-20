@@ -1,0 +1,33 @@
+//客人信息查询
+
+[{
+    "methodName":"get，/roomer/querycheck",
+    "outline":"客人住宿查询请求接口" ,
+    "parameter":"uid"
+}
+,
+
+{
+    "methodName":"get，/roomer/querycheck",
+    "outline":"客人住宿查询响应接口" ,
+    "parameter":"success成功与否，message信息，checkdata{roomername,roomertel,rid，sdate，edate，remark}}"
+},
+
+
+{
+    "methodName":"get，/roomer/querybooking",
+    "outline":"客人预约查询请求接口" ,
+    "parameter":"uid"
+}
+,
+
+{
+    "methodName":"get，/roomer/querybooking",
+    "outline":"客人预约查询响应接口" ,
+    "parameter":"success成功与否，message信息，，bookdata{roomername,roomertel,rid，sdate，edate，remark"
+},
+
+
+
+
+]

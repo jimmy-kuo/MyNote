@@ -1,0 +1,49 @@
+//预定接口
+
+[{
+    "methodName":"get，/booking/commit",
+    "outline":"单人预定房间请求接口" ,
+    "parameter":"uid公司名，user用户名，rid，sdate，edate，roomername，roomertel，remark"
+}
+,
+
+{
+    "methodName":"get，/booking/commit",
+    "outline":"单人预定房间响应接口" ,
+    "parameter":"success成功与否，message信息"
+},
+
+
+{
+    "methodName":"get，/booking/teamcommit",
+    "outline":"团队预定房间请求接口" ,
+    "parameter":"uid公司名，user用户名，rid（一个列表），sdate，edate，roomername，roomertel，remark"
+}
+,
+
+{
+    "methodName":"get，/booking/teamcommit",
+    "outline":"团队预定房间响应接口" ,
+    "parameter":"success成功与否，message信息"
+},
+
+
+
+
+
+{
+    "methodName":"get，/booking/delete",
+    "outline":"房间预约取消请求接口" ,
+    "parameter":"id数据库中预约信息自增序列号，uid，user"
+        
+}
+,
+{
+    "methodName":"get，/administrator/changeroom",
+    "outline":"房间预约取消响应接口" ,
+    "parameter":"success取消成功与否，message成功失败原因",
+
+}
+
+
+]

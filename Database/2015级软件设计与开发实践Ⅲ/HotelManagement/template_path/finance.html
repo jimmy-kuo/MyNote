@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+	<title>财务查询 | 客房管理系统</title>
+	<!-- start:bootstrap v3.2.0 -->
+	<link rel="stylesheet" type="text/css" href="../static/css/bootstrap.min.css">
+	<!-- start:font awesome v4.1.0 -->
+	<link rel="stylesheet" type="text/css" href="../static/css/font-awesome.min.css">
+    <!-- start:bootstrap reset -->
+    <link rel="stylesheet" type="text/css" href="../static/css/bootstrap-reset.css">
+	<!-- start:style arjuna -->
+	<link rel="stylesheet" type="text/css" href="../static/css/arjuna.css">
+    <!-- start:style for this page -->
+    <link rel="stylesheet" type="text/css" href="../static/css/table-responsive.css">
+	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+        function queryFinance() {
+            var sdate=document.getElementById('sdate').value;
+            var edate=document.getElementById('edate').value;   
+            $.ajax({
+                type: 'get',
+                url: 'http://127.0.0.1:8000/administrator/finance', 
+                async:false, 
+                data: {
+                    "sdate": sdate,
+                    "edate": edate
+                },
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function(data) {
+                    if(data.success==true){
+                        var tbody=document.getElementById("financetbody"); 
+                        var incomebody=document.getElementById("income"); 
+                        var data1=data.data;
+                        var str="";
+                        for (i in data1) {  
+                            str += "<tr>" +  
+                            "<td>" + data1[i].rid + "</td>" +  
+                            "<td>" + data1[i].sdate + "</td>" +  
+                            "<td>" + data1[i].edate + "</td>" +  
+                            "<td>" + data1[i].income + "</td>" +  
+                            "<td>" + data1[i].roomername + "</td>" +  
+                            "<td>" + data1[i].roomertel + "</td>" +  
+                            "<td>" + data1[i].user + "</td>" +  
+                            "</tr>";  
+                            }  
+                        tbody.innerHTML = str;
+                        incomebody.innerHTML = "<strong>该段时间总收入："+data.totalincome+"元</strong> ";  
+                    }
+                    else{
+                        alert("查询失败");
+                    }
+                },
+                error: function() {
+                    alert("查询失败,请检查服务器");
+                },
+            })
+        }
+    </script>
+</head>
+<body class="cl-default fixed">
+
+    <!-- start:navbar top -->
+    <header class="header">
+            <a href="index.html" class="logo">
+                <i class="fa fa-pied-piper-alt"></i> 酒店客房管理
+            </a>
+            <!-- Header Navbar: style can be found in header.less -->
+            <nav class="navbar navbar-static-top" role="navigation">
+                <!-- Sidebar toggle button-->
+                <a href="#" class="navbar-btn sidebar-toggle" data-target="#atas" data-toggle="offcanvas" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+        
+                <div class="collapse navbar-collapse" id="atas">
+                   
+                    
+                </div>
+            </nav> -->
+        </header>
+        <!-- end:navbar top -->
+
+    <!-- start:wrapper body -->
+    <div class="wrapper row-offcanvas row-offcanvas-left">
+            <!-- start:left sidebar -->
+            <aside class="left-side sidebar-offcanvas">
+                <section class="sidebar">
+                    <!-- Sidebar user panel -->
+                    <div class="info">
+                        <strong style="color: #eee;" font style="font-size:14px">您好，欢迎使用客房后台管理系统</strong>
+                        <br></br>
+                    </div>
+                    <!-- sidebar menu: : style can be found in sidebar.less -->
+                    <ul class="sidebar-menu">
+                        <li class="active">
+                            <a href="index.html">
+                                <i class="fa fa-dashboard"></i> <span>房间信息</span>
+                            </a>
+                        </li>
+                        <li class="active">
+                             <a href="finance.html">
+                                 <i class="fa fa-dashboard"></i> <span>财务查询</span>
+                            </a>
+                        </li>
+                        <li class="active">
+                            <a href="user.html">
+                                <i class="fa fa-dashboard"></i> <span>操作员信息</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- start:project stats -->
+                    
+                </section>
+            </aside>
+            <!-- end:left sidebar -->
+
+        <!-- start:right sidebar -->
+        <aside class="right-side">
+            <section class="content">
+                <p style="font-size:20px;"><i class="fa fa-home icon-square icon-info"></i>财务查询</p>
+                <!-- start:content -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <!-- start:responsive table -->
+                        <div class="box">
+                            <h4>请选择查询时间范围：</h4>
+                            <label for="sdata">起始时间：</label><input size="25" id="sdate" type="date" placeholder="请按照格式：2016-06-01输入"/>
+                            <label for="edate">离店时间：</label><input size="25" id="edate" type="date" placeholder="请按照格式：2016-06-01输入"/>
+                            <input type="button" onclick="queryFinance()" value="查询"></input>
+                            <hr>
+                            <section id="unseen">
+                                <table class="table table-bordered table-striped table-condensed">
+                                    <thead>
+                                        <tr>
+                                            <th>房间号</th>
+                                            <th>入住时间</th>
+                                            <th>离店时间</th>
+                                            <th class="numeric">收入</th>
+                                            <th >房客姓名</th>
+                                            <th >房客电话</th>
+                                            <th >处理员工</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="financetbody">
+                                    </tbody>
+                                </table>
+                                <div id="income">
+                                </div>
+                            </section>
+                        </div>
+                        <!-- end:responsive table -->
+                    </div>
+                </div>
+
+               
+
+            </section>
+        </aside>
+        <!-- end:right sidebar -->
+
+    </div>
+    <!-- end:wrapper body -->
+
+	<!-- start:javascript for all pages -->
+		<!-- start:jquery -->
+		<script src="../static/js/jquery-1.11.1.min.js"></script>
+		<!-- start:bootstrap -->
+		<script src="../static/js/bootstrap.min.js"></script>
+		<!-- start:arjuna.js -->
+		<script src="../static/js/arjuna.js"></script>
+	<!-- end:javascript for all pages-->
+
+</body>
+</html>
