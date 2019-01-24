@@ -280,10 +280,13 @@ faiss 是由 Facebook 开源的一个基于乘积量化(Product Quantization)的
 * RFC 1035 + 1034 (DNS zonefile 文件格式)
 
 ### 博客摘要
+*-这是一些我十分喜欢的文章,并非是我所创造*
+
 * [编程的智慧](http://www.yinwang.org/blog-cn/2015/11/21/programming-philosophy)————王垠
 * [如何掌握所有的程序语言](http://www.yinwang.org/blog-cn/2017/07/06/master-pl)————王垠
 * [The Magpie Developer](https://news.cnblogs.com/n/544167/)————CODING HORROR
 * [Teach Yourself Programmingin 10 Years](http://blog.jobbole.com/22905/)————Peter Norvig
+* [Stop Learning Frameworks](https://sizovs.net/2018/12/17/stop-learning-frameworks/) - [停止学习框架](https://juejin.im/post/5c1a839f518825780008537d)————Eduards Sizovs 
 
 # Contact
 
