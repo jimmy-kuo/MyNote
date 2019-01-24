@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+    <title>房间信息管理 | 客房管理系统</title>
+    <!-- start:bootstrap v3.2.0 -->
+    <link rel="stylesheet" type="text/css" href="../static/css/bootstrap.min.css">
+    <!-- start:font awesome v4.1.0 -->
+    <link rel="stylesheet" type="text/css" href="../static/css/font-awesome.min.css">
+    <!-- start:bootstrap reset -->
+    <link rel="stylesheet" type="text/css" href="../static/css/bootstrap-reset.css">
+    <!-- start:style arjuna -->
+    <link rel="stylesheet" type="text/css" href="../static/css/arjuna.css">
+    <!-- start:style for this page -->
+    <link rel="stylesheet" href="../static/plugins/data-tables/DT_bootstrap.css" />
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+        function loadjscssfile(filename) {
+            var fileref = document.createElement('script');
+            fileref.setAttribute("type", "text/javascript");
+            fileref.setAttribute("src", filename);
+            document.getElementsByTagName("head")[0].appendChild(fileref);
+        }
+
+        function getroom() {
+            $.ajax({
+                type: 'get',
+                url: 'http://127.0.0.1:8000/room/checkroom',
+                async: false,
+                data: {},
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function(data) {
+                    if (data.success == true) {
+                        var tbody = document.getElementById("roominfo");
+                        var data1 = data.data;
+                        var str = "";
+                        for (i in data1) {
+                            str += "<tr>" +
+                                "<td hidden>" + data1[i].id + "</td>" +
+                                "<td><input type=checkbox></input></td>" +
+                                "<td>" + data1[i].rid + "</td>" +
+                                "<td>" + data1[i].roomername + "</td>" +
+                                "<td>" + data1[i].roomertel + "</td>" +
+                                "<td>" + data1[i].remark + "</td>" +
+                                "<td>" + data1[i].sdate + "</td>" +
+                                "<td>" + data1[i].edate + "</td>" +
+                                "<td></td>" +
+                                "<td><button type=button onclick=checkoutroom(this)>Checkout</button></td>" +
+                                "</tr>";
+                        }
+                        tbody.innerHTML = str;
+                        $("#editable-sample").dataTable().fnDestroy();
+                        loadjscssfile("../static/js/jquery-1.11.1.min.js");
+                        loadjscssfile("../static/js/bootstrap.min.js");
+                        loadjscssfile("../static/js/arjuna.js");
+                        loadjscssfile("../static/plugins/data-tables/jquery.dataTables.js");
+                        loadjscssfile("../static/plugins/data-tables/DT_bootstrap.js");
+                        loadjscssfile("../static/js/editable-table.js");
+                        var fileref = document.createElement('script');
+                        fileref.setAttribute("type", "text/javascript");
+                        fileref.innerHTML = "jQuery(document).ready(function() {EditableTable.init();});";
+                        document.getElementsByTagName("head")[0].appendChild(fileref);
+                    } else {
+                        alert("查询失败");
+                    }
+                },
+                error: function() {
+                    alert("查询失败,请检查服务器");
+                },
+            })
+        }
+
+        function inputnew() {
+            document.getElementById("inputForm").style.display = "block";
+        }
+
+
+        function checkoutroom(btn) {
+            var tr = btn.parentElement.parentElement;
+            var tdprice = tr.cells[8];
+            var tdconfirm = tr.cells[9];
+            tdprice.innerHTML = "<input type=text id=" + tr.cells[0].innerHTML + "></input>";
+            tdconfirm.innerHTML = "<button type=submit onclick=submitcheckout(this)>Submit</button>";
+        }
+
+        function submitcheckout(btn) {
+
+            var tr = btn.parentElement.parentElement;
+            var id = tr.cells[0].innerHTML;
+            var rid = tr.cells[2].innerHTML;
+            var price = document.getElementById(id).value;
+            $.ajax({
+                type: 'get',
+                url: 'http://127.0.0.1:8000/check/checkout',
+                async: false,
+                data: {
+                    "rid": rid,
+                    "id": id,
+                    "income": price,
+                },
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function(data) {
+                    if (data.success == true) {
+                        alert(data.message);
+                        location.href = "todayroom.html";
+                    } else {
+                        alert(data.message);
+                    }
+                },
+                error: function() {
+                    alert("数据交互出错");
+                },
+            })
+        }
+
+        function checkallroom() {
+            var tr = document.getElementsByTagName("tr");
+            var id = new Array();
+            var price = document.getElementById("price").value;
+            var rid = new Array();
+            for (var i = 1; i < tr.length; i++) {
+                if (tr[i].cells[1].firstChild.checked == true) {
+                    id.push(tr[i].cells[0].innerHTML);
+                    rid.push(tr[i].cells[2].innerHTML);
+                }
+            }
+            id = id.toString();
+            rid = rid.toString();
+            $.ajax({
+                type: 'get',
+                url: 'http://127.0.0.1:8000/check/teamcheckout',
+                async: false,
+                data: {
+                    "rid": rid,
+                    "id": id,
+                    "income": price,
+                },
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function(data) {
+                    if (data.success == true) {
+                        alert(data.message);
+                        // location.href = "todayroom.html";
+                    } else {
+                        alert(data.message);
+                    }
+                },
+                error: function() {
+                    alert("数据交互出错");
+                },
+            })
+
+        }
+    </script>
+</head>
+
+<body class="cl-default fixed" onload="getroom()">
+
+    <!-- start:navbar top -->
+    <!-- start:navbar top -->
+    <header class="header">
+        <a href="index.html" class="logo">
+            <i class="fa fa-pied-piper-alt"></i> 酒店客房管理
+        </a>
+        <!-- Header Navbar: style can be found in header.less -->
+        <nav class="navbar navbar-static-top" role="navigation">
+            <!-- Sidebar toggle button-->
+            <a href="#" class="navbar-btn sidebar-toggle" data-target="#atas" data-toggle="offcanvas" role="button">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+
+            <div class="collapse navbar-collapse" id="atas">
+
+
+            </div>
+        </nav> -->
+    </header>
+    <!-- end:navbar top -->
+
+    <!-- start:wrapper body -->
+    <div class="wrapper row-offcanvas row-offcanvas-left">
+        <!-- start:left sidebar -->
+        <aside class="left-side sidebar-offcanvas">
+            <section class="sidebar">
+                <!-- Sidebar user panel -->
+                <div class="info">
+                    <strong style="color: #eee;" font style="font-size:14px">您好，欢迎使用客房管理系统</strong>
+                    <br></br>
+                </div>
+                <!-- sidebar menu: : style can be found in sidebar.less -->
+                <ul class="sidebar-menu">
+                    <li class="active">
+                        <a href="index.html">
+                            <i class="fa fa-dashboard"></i> <span>房间总览</span>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="todayroom.html">
+                            <i class="fa fa-laptop"></i> <span>今日入住情况</span>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="checkin.html">
+                            <i class="fa fa-edit"></i> <span>登记</span>
+                        </a>
+                    </li>
+                    <li class="treeview">
+                        <a href="">
+                            <i class="fa fa-cog"></i>
+                            <span>预约</span>
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="querybooking.html"><i class="fa fa-circle-o"></i>查询预约</a></li>
+                            <li><a href="booking.html"><i class="fa fa-circle-o"></i>预约新房间</a></li>
+                        </ul>
+                    </li>
+                    <!-- start:project stats -->
+
+            </section>
+        </aside>
+        <!-- end:left sidebar -->
+
+
+        <!-- start:right sidebar -->
+        <aside class="right-side">
+            <section class="content">
+                <p style="font-size:20px;"><i class="fa fa-home icon-square icon-info"></i>今日入住情况</p>
+                <!-- start:content -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <!-- start:editable table -->
+                        <div class="box">
+                            <div class="adv-table editable-table ">
+                                <div class="space15"></div>
+                                <table class="table table-striped table-hover table-bordered" id="editable-sample">
+                                    <thead>
+                                        <tr>
+                                            <th hidden>id</th>
+                                            <th></th>
+                                            <th>房间号</th>
+                                            <th>住户姓名</th>
+                                            <th>住户电话</th>
+                                            <th>备注</th>
+                                            <th>入住时间</th>
+                                            <th>约定离店时间</th>
+                                            <th>实付金额</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="roominfo">
+
+                                    </tbody>
+                                </table>
+                            </div>
+                            <hr>
+                            <div class="clearfix">
+                                <div class="btn-group" style="text-align:right;">
+                                    <button onclick="inputnew()" class="btn btn-primary">
+                                                批量结账
+                                            </button>
+                                </div>
+                            </div>
+                            <div hidden id="inputForm">
+                                <form>
+                                    <label for="price">请输入总价格：</label><input type="text" id="price">
+                                    <button type="submit" onclick="checkallroom()">checkout</button>
+                                </form>
+                            </div>
+
+                        </div>
+                        <!-- end:editable table -->
+                    </div>
+                </div>
+                <!-- end:content -->
+
+            </section>
+        </aside>
+        <!-- end:right sidebar -->
+
+    </div>
+    <!-- end:wrapper body -->
+
+    <!-- start:javascript for all pages -->
+    <script src="../static/js/jquery-1.11.1.min.js"></script>
+    <script src="../static/js/bootstrap.min.js"></script>
+    <script src="../static/js/arjuna.js"></script>
+    <!-- end:javascript for all pages-->
+
+    <!-- start:javascript for this page -->
+    <script src="../static/plugins/data-tables/jquery.dataTables.js"></script>
+    <script src="../static/plugins/data-tables/DT_bootstrap.js"></script>
+    <script src="../static/js/editable-table.js"></script>
+    <script>
+        jQuery(document).ready(function() {
+            EditableTable.init();
+        });
+    </script>
+    <!-- end:javascript for this page -->
+
+</body>
+
+</html>

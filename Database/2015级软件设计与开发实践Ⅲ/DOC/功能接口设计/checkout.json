@@ -1,0 +1,34 @@
+//结账接口
+
+[{
+    "methodName":"get，/check/checkout",
+    "outline":"单人结账请求接口" ,
+    "parameter":"id（登记信息自增序列号，income，uid，user"
+}
+,
+
+{
+    "methodName":"get，/check/checkout",
+    "outline":"单人结账响应接口" ,
+    "parameter":"success成功与否，message信息"
+},
+
+
+{
+    "methodName":"get，/check/teamcheckout",
+    "outline":"团队结账房间请求接口" ,
+    "parameter":"id（一个列表），income，uid，user,rid列表"
+}
+,
+
+{
+    "methodName":"get，/check/teamcheckout",
+    "outline":"团队结账房间响应接口" ,
+    "parameter":"success成功与否，message信息"
+},
+
+
+
+
+
+]

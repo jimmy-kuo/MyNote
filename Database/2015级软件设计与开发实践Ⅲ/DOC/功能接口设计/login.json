@@ -1,0 +1,19 @@
+//登录接口，根据账号返回权限
+
+[{
+    "methodName":"get，/login",
+    "outline":"客人查询请求接口" ,
+    "parameter":"uid，user，password"
+}
+,
+
+{
+    "methodName":"get，/login",
+    "outline":"客人情况查询响应接口" ,
+    "parameter":"success成功与否，message信息，roles用户权限"
+}
+
+
+
+
+]

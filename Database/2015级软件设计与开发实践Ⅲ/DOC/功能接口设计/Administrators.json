@@ -1,0 +1,78 @@
+//管理员涉及的功能接口
+
+[{
+    "methodName":"get，/administrator/setusers",
+    "outline":"管理员新增操作账号请求接口" ,
+    "parameter":"uid公司名，user用户名，password密码",
+    "uid":"威海格林豪泰酒店",
+    "user":"zhangxiaohua",
+    "password":"123456",
+    "roles":2
+}
+,
+
+{
+    "methodName":"get，/administrator/setusers",
+    "outline":"管理员新增操作账号响应接口" ,
+    "parameter":"success成功与否，message信息",
+    "success":true,
+    "message":"新增用户xxx，密码xxx"
+},
+
+
+
+
+
+{
+    "methodName":"get，/administrator/changeroom",
+    "outline":"房间基础信息修改请求接口" ,
+    "parameter":"rid房间号，roomtype，roomprice，remark备注信息，uid",
+    "rid":"eid_dw34sdfa",
+    "uid":"威海格林豪泰酒店",
+    "password":"123456",
+    "roomtype":"标间",
+    "roomprice":128,
+    "remark":"该房间无窗户"          
+}
+,
+{
+    "methodName":"get，/administrator/changeroom",
+    "outline":"房间基础信息修改响应接口" ,
+    "parameter":"success修改成功与否，message成功失败原因",
+    "success":true,
+    "message":"修改成功"
+},
+
+
+{
+    "methodName":"get，/administrator/finance",
+    "outline":"财务查询接口" ,
+    "parameter":"sdate,edate财务起始时间，uid",
+    "sdate":"2018-05-12",
+    "edate":"2018-05-16"     
+}
+,
+{
+    "methodName":"get，/administrator/finance",
+    "outline":"财务信息响应接口" ,
+    "parameter":"success，data数据，totalincome总收入",
+    "success":true,
+    "totalincome":30432,
+    "date":[{"rid":"302","sdate":"","edate":"","income":"","user":"","roomername":"","rommertel":""},
+        {"rid":"302","sdate":"","edate":"","income":"","user":"","roomername":"","rommertel":""}]
+},
+
+{
+    "methodName":"get，/administrator/addroom",
+    "outline":"增加房间接口" ,
+    "parameter":"rid房间号，roomtype，roomprice，remark备注信息，uid"  
+}
+,
+{
+    "methodName":"get，/administrator/addroom",
+    "outline":"增加房间接口响应接口" ,
+    "parameter":"success修改成功与否，message成功失败原因",
+    "success":true,
+    "message":"修改成功",
+}
+]

@@ -1,0 +1,63 @@
+//客房信息查询
+
+[{
+    "methodName":"get，/room/allinfo",
+    "outline":"所有客房信息请求接口，管理员修改用" ,
+    "parameter":"uid"
+}
+,
+
+{
+    "methodName":"get，/room/allinfo",
+    "outline":"客人情况查询响应接口" ,
+    "parameter":"data{rid,roomtype,roomprice,remark}"
+},
+
+
+
+
+
+{
+    "methodName":"get，/room/checkroom",
+    "outline":"登记客房查询" ,
+    "parameter":"uid"
+}
+,
+
+{
+    "methodName":"get，/room/checkroom",
+    "outline":"登记客房查询" ,
+    "parameter":"checkdata{roomername,roomertel,rid，sdate，edate，remark}"
+},
+
+
+{
+    "methodName":"get，/room/bookingroom",
+    "outline":"预约客房查询" ,
+    "parameter":"uid"
+}
+,
+
+{
+    "methodName":"get，/room/bookingroom",
+    "outline":"预约客房查询" ,
+    "parameter":"bookingdata{roomername,roomertel,rid，sdate，edate，remark}"
+}
+
+
+,
+{
+    "methodName":"get，/room/availableroom",
+    "outline":"按时间查询房间" ,
+    "parameter":"uid，sdate，edate"
+}
+,
+
+{
+    "methodName":"get，/room/availableroom",
+    "outline":"按时间查询房间" ,
+    "parameter":"data{rid，roomtype，roomprice，identity，{sdate，edata}}（identity判断是否可登记/预约，1为可预约登记）"
+}
+
+
+]
